@@ -1,0 +1,11 @@
+*.bak
+.idea
+.DS_STORE
+app/configs/development.php
+app/configs/production.php
+app/configs/testing.php
+app/log/*.log
+app/tmp/twig
+vagrant/.vagrant
+vendor
+composer.lock

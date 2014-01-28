@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="starter_kit" defaultIdMethod="native"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
+
+    <table name="session">
+        <column name="session_id" type="VARCHAR" size="255" required="true" primaryKey="true" />
+        <column name="session_value" type="LONGVARCHAR" required="true" />
+        <column name="session_time" type="INTEGER" size="11" required="true" />
+    </table>
+
+</database>

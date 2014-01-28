@@ -1,0 +1,1 @@
+Çeşitli gereksiz dosyalar/klasörler bu dizin altında oluşturulabilir ya da bu dizin hedef olarak gösterilebilir.
