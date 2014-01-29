@@ -65,9 +65,7 @@ $ vendor/bin/propel model:build --output-dir=src/
 
 ## Migration
 
-Migration özelliği, veritabanı hazır olduktan sonra kullanılabilmektedir. Bunun için ilk olarak yukarıda anlatılan
-**propel sql:insert** ile hazırlık yapılmalıdır. Veritabanı hazırlandıktan sonra, schema.xml değişikliklerinde şu komutlar
-çalıştırılmalıdır.
+**schema.xml** dosyası değiştirildiğinde şu komutlarla değişiklikler veritabanına aktarılmalıdır:
 
 ```bash
 $ vendor/bin/propel migration:diff
