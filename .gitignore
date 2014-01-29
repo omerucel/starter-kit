@@ -9,4 +9,3 @@ app/tmp/twig
 vagrant/.vagrant
 vendor
 composer.lock
-buildtime-conf.xml

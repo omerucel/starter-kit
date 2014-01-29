@@ -7,6 +7,11 @@
         <column name="session_id" type="VARCHAR" size="255" required="true" primaryKey="true" />
         <column name="session_value" type="LONGVARCHAR" required="true" />
         <column name="session_time" type="INTEGER" size="11" required="true" />
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Charset" value="utf8" />
+            <parameter name="Collate" value="utf8_general_ci" />
+        </vendor>
     </table>
 
 </database>

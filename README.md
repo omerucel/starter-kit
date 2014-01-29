@@ -68,8 +68,8 @@ $ vendor/bin/propel model:build --output-dir=src/
 **schema.xml** dosyası değiştirildiğinde şu komutlarla değişiklikler veritabanına aktarılmalıdır:
 
 ```bash
-$ vendor/bin/propel migration:diff
-$ vendor/bin/propel migration:migrate
+$ vendor/bin/propel migration:diff --connection="starterkit=mysql:host=127.0.0.1;dbname=starterkit;user=root" --verbose
+$ vendor/bin/propel migration:migrate --connection="starterkit=mysql:host=127.0.0.1;dbname=starterkit;user=root" --verbose
 ```
 
 ## SQL
