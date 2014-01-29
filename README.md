@@ -16,6 +16,7 @@ $ composer update
 $ cp app/configs/development.php.sample app/configs/development.php
 $ cp app/configs/production.php.sample app/configs/production.php
 $ cp app/configs/testing.php.sample app/configs/testing.php
+$ cp buildtime-conf.xml.sample buildtime-conf.xml
 $ cd vagrant
 $ vagrant up
 $ vagrant ssh
@@ -50,3 +51,48 @@ $ php app/commands/test.php -e development
 == nginx & apache ==
 
 192.168.56.30 adresi üzerinden proje yayınlanmaktadır.
+
+= Veritabanı Ayarı =
+
+Veritabanı adı değiştirilmek istenirse aşağıdaki dosyalarda bulunan **starterkit** ismi güncellenmelidir. Bu
+dosyalar güncellendikten sonra *migration* komutları çalıştırılmalıdır.
+
+- /app/configs/global.php (pdo dbname)
+- /buildtime-conf.xml
+- /schema.xml
+
+= Propel =
+
+Modelleri oluşturmak için aşağıdaki komut çalıştırılmalıdır.
+
+```bash
+$ vendor/bin/propel model:build --output-dir=src/
+```
+
+== Migration ==
+
+Migration özelliği, veritabanı hazır olduktan sonra kullanılabilmektedir. Bunun için ilk olarak yukarıda anlatılan
+**propel sql:insert** ile hazırlık yapılmalıdır. Veritabanı hazırlandıktan sonra, schema.xml değişikliklerinde şu komutlar
+çalıştırılmalıdır.
+
+```bash
+$ vendor/bin/propel migration:diff
+$ vendor/bin/propel migration:migrate
+```
+
+== SQL ==
+
+Eğer veritabanı şemasının sql dosyasına ihtiyaç duyulursa ya da sql dosyası çalıştırılmak istenirse
+aşağıdaki komutlar kullanılmalıdır:
+
+SQL dosyalarını oluşturmak için:
+
+```bash
+$ vendor/bin/propel sql:build
+```
+
+SQL dosyalarını veritabanına aktarmak için:
+
+```bash
+$ vendor/bin/propel sql:insert --connection="starterkit=mysql:host=127.0.0.1;dbname=starterkit;user=root" --verbose
+```

@@ -8,6 +8,8 @@ use Application\Resource\ConfigResource;
 use Application\Resource\HttpResource;
 use Application\Resource\MonologResource;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Propel\Runtime\Connection\ConnectionManagerSingle;
+use Propel\Runtime\Propel;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseModule extends ModuleAbstract
@@ -41,7 +43,7 @@ abstract class BaseModule extends ModuleAbstract
      */
     public function dispatch($controllerClass, $requestMethod = 'get', array $params = array())
     {
-        if (static::$isFirstDispatch) {
+        if (!static::$isFirstDispatch) {
             $response = $this->boot();
             if ($response instanceof Response) {
                 $response->send();
@@ -75,6 +77,11 @@ abstract class BaseModule extends ModuleAbstract
         $response->send();
     }
 
+    /**
+     * TODO : Bu metod modül bootstrap sınıfı oluşturulup içine eklenebilir.
+     *
+     * @return null
+     */
     public function boot()
     {
         static::$isFirstDispatch = true;
@@ -86,6 +93,19 @@ abstract class BaseModule extends ModuleAbstract
                 'Application' => $configs['base_path'] . '/src/'
             )
         );
+
+        /**
+         * @var \Propel\Runtime\ServiceContainer\ServiceContainerInterface $serviceContainer
+         */
+        $serviceContainer = Propel::getServiceContainer();
+        $serviceContainer->setAdapterClass($configs['pdo']['dbname'], 'mysql');
+        $manager = new ConnectionManagerSingle();
+        $manager->setConfiguration(array(
+            'dsn'      => $configs['pdo']['dsn'],
+            'user'     => $configs['pdo']['username'],
+            'password' => $configs['pdo']['password'],
+        ));
+        $serviceContainer->setConnectionManager($configs['pdo']['dbname'], $manager);
 
         return null;
     }

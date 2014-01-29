@@ -10,6 +10,9 @@ date_default_timezone_set('Europe/Istanbul');
 $configs['recaptcha']['public_key'] = '';
 $configs['recaptcha']['private_key'] = '';
 
+/**
+ * twig
+ */
 $configs['twig']['options']['cache'] = false;
 
 return $configs;

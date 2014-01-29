@@ -34,6 +34,7 @@ $configs['media_url'] = '/';
  * Database
  */
 $configs['pdo']['dsn'] = 'mysql:host=127.0.0.1;dbname=starterkit;charset=utf8';
+$configs['pdo']['dbname'] = 'starterkit';
 $configs['pdo']['username'] = 'root';
 $configs['pdo']['password'] = '';
 
