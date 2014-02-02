@@ -16,7 +16,6 @@ $ composer update
 $ cp app/configs/development.php.sample app/configs/development.php
 $ cp app/configs/production.php.sample app/configs/production.php
 $ cp app/configs/testing.php.sample app/configs/testing.php
-$ cp buildtime-conf.xml.sample buildtime-conf.xml
 $ cd vagrant
 $ vagrant up
 $ vagrant ssh
