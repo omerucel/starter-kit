@@ -48,4 +48,9 @@ class Meta
      * @var string
      */
     public $relNext;
+
+    /**
+     * @var string
+     */
+    public $fullPath = '/';
 }

@@ -1,0 +1,66 @@
+<!-- general -->
+<meta charset="utf-8" />
+<title>{{ meta.title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="all" />
+
+<!-- seo -->
+{% if meta.relPrev %}
+    <link rel="prev" href="{{ meta.relPrev }}" />
+{% endif %}
+{% if meta.relNext %}
+    <link rel="next" href="{{ meta.relNext }}" />
+{% endif %}
+{% if meta.canonical %}
+    <link rel="canonical" href="{{ meta.canonical }}" />
+{% endif %}
+<meta name="description" content="{{ meta.description }}" />
+<meta name="keywords" content="{{ meta.keywords }}" />
+
+<!-- Apple Touch Icons -->
+<link rel="shortcut icon" href="{{ asset('/favicon.ico') }}" type="image/x-icon" />
+<link rel="apple-touch-icon" href="{{ asset('/img/apple-touch-icon.png') }}" />
+<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/img/apple-touch-icon-57x57.png') }}" />
+<link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/img/apple-touch-icon-72x72.png') }}" />
+<link rel="apple-touch-icon" sizes="114x114" href="{{ asset('/img/apple-touch-icon-114x114.png') }}" />
+<link rel="apple-touch-icon" sizes="144x144" href="{{ asset('/img/apple-touch-icon-144x144.png') }}" />
+<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/img/apple-touch-icon-60x60.png') }}" />
+<link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/img/apple-touch-icon-120x120.png') }}" />
+<link rel="apple-touch-icon" sizes="114x114" href="{{ asset('/img/apple-touch-icon-76x76.png') }}" />
+<link rel="apple-touch-icon" sizes="144x144" href="{{ asset('/img/apple-touch-icon-152x152.png') }}" />
+
+<!-- Facebook -->
+<meta property="og:site_name" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ meta.title }}"/>
+<meta property="og:description" content="{{ meta.description }}" />
+<meta property="og:url" content="{{ meta.fullPath }}"/>
+{% if meta.imageUrl %}
+    <meta property="og:image" content="{{ meta.imageUrl }}" />
+{% else %}
+    <meta property="og:image" content="{{ asset('/img/logo.png') }}" />
+{% endif %}
+
+{% if meta.videoUrl %}
+    <meta property="og:video" content="{{ meta.videoUrl }}">
+{% endif %}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="{{ meta.title }}" />
+<meta name="twitter:description" content="{{ meta.description }}" />
+<meta name="twitter:url" content="{{ meta.fullPath }}" />
+{% if meta.imageUrl %}
+    <meta name="twitter:image:src" content="{{ meta.imageUrl }}" />
+{% else %}
+    <meta name="twitter:image:src" content="{{ asset('/img/logo.png') }}" />
+{% endif %}
+
+<!-- charset & disable translation -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="tr" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+
+<meta name="alexaVerifyID" content="" />
+<link href="" rel="publisher" />
+<link href="" rel="author" />
