@@ -16,5 +16,8 @@ $routes = include_once '../app/configs/routes.php';
 
 $router = new \Application\Router($routes);
 
-$application = new \Application\Application($configs);
+$bootstrap = new \Application\Bootstrap($configs);
+$bootstrap->boot();
+
+$application = new \Application\Application();
 $application->serve($router);

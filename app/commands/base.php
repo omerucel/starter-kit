@@ -16,4 +16,5 @@ if (!isset($cmdOptions['e'])) {
 // Configs
 $configs = include_once realpath(__DIR__ . '/../') . '/configs/' . $environment . '.php';
 
-$application = new \Application\Application($configs);
+$bootstrap = new \Application\Bootstrap($configs);
+$bootstrap->boot();

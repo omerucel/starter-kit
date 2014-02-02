@@ -9,14 +9,6 @@ class Application
     use ConfigResource;
 
     /**
-     * @param array $configs Configuration array
-     */
-    public function __construct(array $configs = array())
-    {
-        $this->setConfigs($configs);
-    }
-
-    /**
      * @param Router $router
      */
     public function serve(Router $router)
