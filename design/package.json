@@ -1,0 +1,10 @@
+{
+    "name": "design",
+    "version": "0.1.0",
+    "devDependencies": {
+        "grunt-contrib-uglify": "latest",
+        "grunt-contrib-sass": "latest",
+        "grunt-contrib-watch": "latest",
+        "grunt-contrib-connect": "latest"
+    }
+}

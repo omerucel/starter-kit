@@ -1,0 +1,33 @@
+body{
+  font-family: $text-font;
+}
+
+.container{
+  @include outer-container;
+}
+
+a{
+  text-decoration: none;
+}
+
+header.page-title{
+  padding: 10px 0;
+  @include clearfix;
+
+  h2{
+    float: left;
+    font-size: em(20);
+    font-weight: 700;
+  }
+
+  a.pull-right{
+    float: right;
+    top: 0;
+    right: 0;
+    font-size: em(14);
+    color: #BB3929;
+  }
+
+  border-bottom: 2px solid #BB3929;
+  margin-bottom: 10px;
+}
