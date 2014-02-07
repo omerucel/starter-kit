@@ -2,14 +2,15 @@
     "name": "omerucel/starter-kit",
     "require": {
         "symfony/http-foundation": "2.3.4",
-        "twig/twig": "1.14.2",
+        "twig/twig": "1.15.0",
         "monolog/monolog": "1.7.0",
         "sybio/image-workshop": "2.0.5",
         "facebook/php-sdk" : "*",
         "recaptcha/php5": "dev-master",
         "swiftmailer/swiftmailer": "5.0.2",
-        "symfony/validator": "v2.4.0",
+        "symfony/validator": "v2.4.1",
         "doctrine/annotations": "v1.1.2",
+        "doctrine/cache": "v1.3.0",
         "propel/propel": "2.0.*@dev"
     },
     "require-dev": {

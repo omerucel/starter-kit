@@ -1,0 +1,39 @@
+<ul class="pagination">
+    {% if pager.getPage() <= 1 %}
+        <li class="disabled"><span>◀</span></li>
+    {% else %}
+        <li><a href="{{ url }}{{ pager.getPage() - 1 }}" rel="prev">◀</a></li>
+    {% endif %}
+
+    {% for i in 1..2 if i < pager.getPage() %}
+        <li><a href="{{ url }}{{ i }}">{{ i }}</a></li>
+    {% endfor %}
+
+    {% if pager.getPage() > 5 %}
+        <li class="disabled"><span>…</span></li>
+    {% endif %}
+
+    {% for i in (pager.getPage() - 2)..(pager.getPage() - 1) if i > 2 %}
+        <li><a href="{{ url }}{{ i }}">{{ i }}</a></li>
+    {% endfor %}
+
+    <li class="active"><span>{{ pager.getPage() }}</span></li>
+
+    {% for i in (pager.getPage() + 1)..(pager.getPage() + 2) if i < pager.getLastPage() - 1 %}
+        <li><a href="{{ url }}{{ i }}">{{ i }}</a></li>
+    {% endfor %}
+
+    {% if pager.getLastPage() - pager.getPage() > 5 %}
+        <li class="disabled"><span>…</span></li>
+    {% endif %}
+
+    {% for i in (pager.getLastPage() - 1)..pager.getLastPage() if i > pager.getPage() %}
+        <li><a href="{{ url }}{{ i }}">{{ i }}</a></li>
+    {% endfor %}
+
+    {% if pager.getPage() < pager.getLastPage() %}
+        <li><a href="{{ url }}{{ pager.getPage() + 1 }}" rel="next">▶</a></li>
+    {% else %}
+        <li class="disabled"><span>▶</span></li>
+    {% endif %}
+</ul>

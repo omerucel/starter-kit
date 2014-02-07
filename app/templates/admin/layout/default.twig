@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <div class="container" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default" role="navigation">
+                    <a class="navbar-brand" href="{{ site_url('/admin') }}">Yönetim Paneli</a>
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-tag"></span> Menü <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ site_url('/admin/test/save') }}"><span class="fa fa-plus"></span> Ekle</a></li>
+                                <li><a href="{{ site_url('/admin/test') }}"><span class="fa fa-bars"></span> Listele</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                        <li><a href="{{ site_url('/admin/logout') }}"><span class="fa fa-sign-out"></span> Oturumu Kapat</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    {% block main_content %}{% endblock %}
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function removeItem(link) {
+            if (confirm('Silme işlemine devam etmek istiyor musunuz?')) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function selectAll(object) {
+            $('input[data-select-all=1]').prop('checked', object.checked);
+        }
+    </script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

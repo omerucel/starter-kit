@@ -14,4 +14,15 @@
         </vendor>
     </table>
 
+    <table name="admin_user" namespace="Application\Entity">
+        <column name="id" type="INTEGER" required="true" autoIncrement="true" primaryKey="true" />
+        <column name="username" type="VARCHAR" size="16" required="true" />
+        <column name="password" type="VARCHAR" size="64" required="true" />
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Charset" value="utf8" />
+            <parameter name="Collate" value="utf8_general_ci" />
+        </vendor>
+    </table>
+
 </database>

@@ -51,7 +51,6 @@ Veritabanı adı değiştirilmek istenirse aşağıdaki dosyalarda bulunan **sta
 dosyalar güncellendikten sonra *migration* komutları çalıştırılmalıdır.
 
 - /app/configs/global.php (pdo dbname)
-- /buildtime-conf.xml
 - /schema.xml
 
 # Propel
