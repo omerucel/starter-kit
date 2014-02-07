@@ -101,3 +101,12 @@ Sunucuya aşağıdaki dizinler gönderilmelidir.
 * src
 * vendor (eğer sunucuda composer çalıştırma imkanı yoksa)
 * composer.json (sunucuda composer çalıştırma imkanı varsa)
+
+# Yönetim Paneli
+
+Yönetim paneline http://192.168.56.30/admin adresinden erişilebilir. Yeni kullanıcı oluşturmak için aşağıdaki örnek
+sql sorgusu kullanılabilir:
+
+```sql
+INSERT INTO admin_user(username, password) VALUES("admin", SHA1("admin"));
+```
