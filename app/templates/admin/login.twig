@@ -1,72 +1,66 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <title>Oturum Aç</title>
+{% extends "admin/layout/empty.twig" %}
 
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container" style="margin-top: 30px;">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="page-title">
-                    <h1>Oturum Aç</h1>
+{% block title %}Oturum Aç{% endblock %}
 
-                    {% if message %}
-                        <div class="alert alert-{{ message_type }}">
-                            <p>{{ message }}</p>
-                        </div>
-                    {% endif %}
-                    <form method="POST" action="">
-                        <div class="form-group {% if form.messages.username %}has-error{% endif %}">
-                            <label class="form-label">Kullanıcı Adı</label>
-                            <input type="text" name="username" class="form-control" placeholder="" value="{{ form.getUsername() }}" />
-                            {% if form.messages.username %}
-                                <span class="help-block">{{ form.messages.username }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="form-group {% if form.messages.password %}has-error{% endif %}">
-                            <label class="form-label">Şifre</label>
-                            <input type="password" name="password" class="form-control" placeholder="" value="" />
-                            {% if form.messages.password %}
-                                <span class="help-block">{{ form.messages.password }}</span>
-                            {% endif %}
-                        </div>
-                        <div id="recaptcha_widget">
-                            <div class="form-group {% if form.messages.validSecurityCode %}has-error{% endif %}">
-                                <label>Güvenlik Kodu</label>
-
-                                <div id="recaptcha_image" style="margin: 10px 0;"></div>
-
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="recaptcha_response_field" name="recaptcha_response_field" />
-                                    <a href="javascript:Recaptcha.reload();" class="btn input-group-addon"><span class="fa fa-refresh"></span></a>
-                                    <a href="javascript:Recaptcha.switch_type('audio');" class="btn input-group-addon recaptcha_only_if_image"><span class="fa fa-headphones"></span></a>
-                                    <a href="javascript:Recaptcha.switch_type('image');" class="btn input-group-addon recaptcha_only_if_audio"><span class="fa fa-picture-o"></span></a>
-                                    <a href="javascript:Recaptcha.showhelp()" class="btn input-group-addon"><span class="fa fa-question"></span></a>
-                                </div>
-                                {% if form.messages.validSecurityCode %}
-                                    <span class="help-block">{{ form.messages.validSecurityCode }}</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn">Oturum Aç</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
+{% block javascripts %}
     <script type="text/javascript">
         var RecaptchaOptions = {
             theme : 'custom',
             custom_theme_widget: 'recaptcha_widget'
         };
     </script>
-    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k={{ form.getRecaptchaPublicKey() }}"></script>
-</body>
-</html>
+    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k={{ recaptcha_public_key }}"></script>
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
+                <div class="page-header">
+                    <h3>Oturum Aç</h3>
+                </div>
+
+                {% include "admin/embed/message.twig" %}
+
+                <form method="POST" action="">
+                    <div class="form-group {% if form.messages.username_empty %}has-error{% endif %}">
+                        <label>Kullanıcı Adı / E-Posta</label>
+                        <input type="text" name="username" placeholder="Kullanıcı Adı ya da E-Posta Adresiniz" class="form-control" />
+                        {% if form.messages.username_empty %}
+                            <span class="help-block">{{ form.messages.username_empty }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group {% if form.messages.password_empty %}has-error{% endif %}">
+                        <label>Şifre</label>
+                        <input type="password" name="password" placeholder="Şifre" class="form-control" />
+                        {% if form.messages.password_empty %}
+                            <span class="help-block">{{ form.messages.password_empty }}</span>
+                        {% endif %}
+                    </div>
+                    <div id="recaptcha_widget">
+                        <div class="form-group {% if form.messages.security_code %}has-error{% endif %}">
+                            <label class="recaptcha_only_if_image">Güvenlik Kodu</label>
+                            <label class="recaptcha_only_if_audio">Güvenlik Kodu</label>
+
+                            <div id="recaptcha_image" style="margin: 10px 0;"></div>
+
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="recaptcha_response_field" name="recaptcha_response_field" />
+                                <a href="javascript:Recaptcha.reload();" class="btn input-group-addon"><span class="fa fa-refresh"></span></a>
+                                <a href="javascript:Recaptcha.switch_type('audio');" class="btn input-group-addon recaptcha_only_if_image"><span class="fa fa-headphones"></span></a>
+                                <a href="javascript:Recaptcha.switch_type('image');" class="btn input-group-addon recaptcha_only_if_audio"><span class="fa fa-picture-o"></span></a>
+                                <a href="javascript:Recaptcha.showhelp()" class="btn input-group-addon"><span class="fa fa-question"></span></a>
+                            </div>
+                            {% if form.messages.security_code %}
+                                <span class="help-block">{{ form.messages.security_code }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Oturum Aç</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

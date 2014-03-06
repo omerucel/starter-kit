@@ -1,13 +1,6 @@
 *.bak
 .idea
 .DS_STORE
-.sass-cache
-node-modules
-app/configs/development.php
-app/configs/production.php
-app/configs/testing.php
-app/log/*.log
-app/tmp/twig
 vagrant/.vagrant
 vendor
 composer.lock

@@ -17,13 +17,15 @@
 
     <testsuites>
         <testsuite name="Test Suite">
-            <directory>./tests/Appplication</directory>
+            <directory>./tests/src/MiniFrame</directory>
+            <directory>./tests/src/Application</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./src/Application/</directory>
+            <directory>./src/MiniFrame</directory>
+            <directory>./src/Application</directory>
         </whitelist>
     </filter>
 </phpunit>

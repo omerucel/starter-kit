@@ -1,9 +1,9 @@
 <?php
 
 return array(
-    '/' => 'Application\Module\Site\HomePage',
+    '/' => 'Application\Web\Site\HomePage',
 
-    '/admin' => 'Application\Module\Admin\HomePage',
-    '/admin/login' => 'Application\Module\Admin\Login',
-    '/admin/logout' => 'Application\Module\Admin\Logout'
+    '/admin' => 'Application\Web\Admin\Dashboard',
+    '/admin/login' => 'Application\Web\Admin\Login',
+    '/admin/logout' => 'Application\Web\Admin\Logout'
 );

@@ -18,16 +18,16 @@
 <meta name="keywords" content="{{ meta.keywords }}" />
 
 <!-- Apple Touch Icons -->
-<link rel="shortcut icon" href="{{ asset('/favicon.ico') }}" type="image/x-icon" />
-<link rel="apple-touch-icon" href="{{ asset('/img/apple-touch-icon.png') }}" />
-<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/img/apple-touch-icon-57x57.png') }}" />
-<link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/img/apple-touch-icon-72x72.png') }}" />
-<link rel="apple-touch-icon" sizes="114x114" href="{{ asset('/img/apple-touch-icon-114x114.png') }}" />
-<link rel="apple-touch-icon" sizes="144x144" href="{{ asset('/img/apple-touch-icon-144x144.png') }}" />
-<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/img/apple-touch-icon-60x60.png') }}" />
-<link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/img/apple-touch-icon-120x120.png') }}" />
-<link rel="apple-touch-icon" sizes="114x114" href="{{ asset('/img/apple-touch-icon-76x76.png') }}" />
-<link rel="apple-touch-icon" sizes="144x144" href="{{ asset('/img/apple-touch-icon-152x152.png') }}" />
+<link rel="shortcut icon" href="{{ asset_url('/favicon.ico') }}" type="image/x-icon" />
+<link rel="apple-touch-icon" href="{{ asset_url('/img/apple-touch-icon.png') }}" />
+<link rel="apple-touch-icon" sizes="57x57" href="{{ asset_url('/img/apple-touch-icon-57x57.png') }}" />
+<link rel="apple-touch-icon" sizes="72x72" href="{{ asset_url('/img/apple-touch-icon-72x72.png') }}" />
+<link rel="apple-touch-icon" sizes="114x114" href="{{ asset_url('/img/apple-touch-icon-114x114.png') }}" />
+<link rel="apple-touch-icon" sizes="144x144" href="{{ asset_url('/img/apple-touch-icon-144x144.png') }}" />
+<link rel="apple-touch-icon" sizes="57x57" href="{{ asset_url('/img/apple-touch-icon-60x60.png') }}" />
+<link rel="apple-touch-icon" sizes="72x72" href="{{ asset_url('/img/apple-touch-icon-120x120.png') }}" />
+<link rel="apple-touch-icon" sizes="114x114" href="{{ asset_url('/img/apple-touch-icon-76x76.png') }}" />
+<link rel="apple-touch-icon" sizes="144x144" href="{{ asset_url('/img/apple-touch-icon-152x152.png') }}" />
 
 <!-- Facebook -->
 <meta property="og:site_name" content="" />
@@ -38,7 +38,7 @@
 {% if meta.imageUrl %}
     <meta property="og:image" content="{{ meta.imageUrl }}" />
 {% else %}
-    <meta property="og:image" content="{{ asset('/img/logo.png') }}" />
+    <meta property="og:image" content="{{ asset_url('/img/logo.png') }}" />
 {% endif %}
 
 {% if meta.videoUrl %}
@@ -53,7 +53,7 @@
 {% if meta.imageUrl %}
     <meta name="twitter:image:src" content="{{ meta.imageUrl }}" />
 {% else %}
-    <meta name="twitter:image:src" content="{{ asset('/img/logo.png') }}" />
+    <meta name="twitter:image:src" content="{{ asset_url('/img/logo.png') }}" />
 {% endif %}
 
 <!-- charset & disable translation -->

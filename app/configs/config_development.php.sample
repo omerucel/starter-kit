@@ -1,0 +1,19 @@
+<?php
+
+$configs = include('global.php');
+
+ini_set('display_errors', true);
+date_default_timezone_set('Europe/Istanbul');
+
+/**
+ * ReCaptcha Service Configs
+ */
+$configs['recaptcha']['public_key'] = '';
+$configs['recaptcha']['private_key'] = '';
+
+/**
+ * Twig Service Configs
+ */
+$configs['twig']['options']['cache'] = false;
+
+return $configs;
