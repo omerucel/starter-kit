@@ -6,6 +6,18 @@ ini_set('display_errors', true);
 date_default_timezone_set('Europe/Istanbul');
 
 /**
+ * PDO Service Configs
+ */
+$configs['pdo']['username'] = 'root';
+$configs['pdo']['password'] = '';
+
+/**
+ * Doctrine Service Configs
+ */
+$configs['doctrine']['is_dev_mode'] = true;
+$configs['doctrine']['sql_log_enable'] = true;
+
+/**
  * ReCaptcha Service Configs
  */
 $configs['recaptcha']['public_key'] = '';
