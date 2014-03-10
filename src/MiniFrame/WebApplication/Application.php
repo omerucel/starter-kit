@@ -35,7 +35,7 @@ class Application extends BaseApplication
     public function serve()
     {
         /**
-         * @var BaseModule $module
+         * @var Module $module
          */
         $route = $this->getRouter()->getCurrentRoute();
         if ($route == null) {
@@ -78,7 +78,7 @@ class Application extends BaseApplication
      * Verilen kontrol sınıfının modülünü bulur.
      *
      * @param  string $controllerClass
-     * @return BaseModule
+     * @return Module
      */
     public function discoverModule($controllerClass)
     {
@@ -94,7 +94,7 @@ class Application extends BaseApplication
         }
 
         /**
-         * @var BaseModule $module
+         * @var Module $module
          */
         $module = $this->modules[$moduleClass];
         $module->registerErrorHandlers();
