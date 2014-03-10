@@ -2,7 +2,7 @@
 
 namespace Application\Web;
 
-use Application\Web\Admin\Exception\AccessDenied;
+use MiniFrame\Extra\Service\AuthService\Exception\AccessDeniedException;
 use MiniFrame\WebApplication\Module;
 
 class Admin extends Module
@@ -13,7 +13,7 @@ class Admin extends Module
      */
     public function handleException(\Exception $exception)
     {
-        if ($exception instanceof AccessDenied) {
+        if ($exception instanceof AccessDeniedException) {
             $this->dispatch('Application\Web\Admin\AccessDenied');
         } else {
             $this->dispatch('Application\Web\Admin\InternalError');

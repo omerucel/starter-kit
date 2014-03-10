@@ -9,7 +9,7 @@ class AccessDenied extends BaseController
         $this->getDefaultLogger()->warning(
             'User permission error.',
             array(
-                'username' => $this->getCurrentUser()->getUsername(),
+                'username' => $this->getAuthService()->getCurrentUser()->getUsername(),
                 'header' => $this->getRequest()->headers->all(),
                 'server' => $this->getRequest()->server->all(),
                 'params' => $this->getRequest()->request->all()

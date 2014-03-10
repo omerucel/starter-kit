@@ -5,60 +5,35 @@ namespace MiniFrame;
 abstract class BaseApplication
 {
     /**
-     * @var array
+     * @var ServiceLoader
      */
-    protected $configData;
+    protected $serviceLoader;
 
     /**
-     * @var Config
+     * @param ServiceLoader $serviceLoader
      */
-    protected $config;
-
-    /**
-     * @var array
-     */
-    protected $services;
-
-    /**
-     * @param array $configData
-     */
-    public function __construct(array $configData = array())
+    public function __construct(ServiceLoader $serviceLoader)
     {
-        $this->configData = $configData;
-        $this->services = array();
-    }
-
-    abstract public function serve();
-
-    /**
-     * @param $name
-     * @return BaseService
-     * @throws \Exception
-     */
-    public function getService($name)
-    {
-        if (!isset($this->services[$name])) {
-            $serviceClass = $this->getConfigs()->get('services.' . $name);
-            if (!$serviceClass) {
-                throw new \Exception('Service is not registered : ' . $name);
-            }
-
-            $service = new $serviceClass($this);
-            $this->services[$name] = $service;
-        }
-
-        return $this->services[$name];
+        $this->serviceLoader = $serviceLoader;
     }
 
     /**
+     * Ayarlara erişmek için yardımcı metod.
+     *
      * @return Config
      */
     public function getConfigs()
     {
-        if ($this->config == null) {
-            $this->config = new Config($this->configData);
-        }
-
-        return $this->config;
+        return $this->getServiceLoader()->getConfigs();
     }
+
+    /**
+     * @return \MiniFrame\ServiceLoader
+     */
+    public function getServiceLoader()
+    {
+        return $this->serviceLoader;
+    }
+
+    abstract public function serve();
 }

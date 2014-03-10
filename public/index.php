@@ -3,8 +3,9 @@
 // Loader
 $loader = include_once '../vendor/autoload.php';
 
-// Configs
-$configs = include('../app/configs/config.php');
+// Config
+$config = include('../app/configs/config.php');
 
-$application = new \MiniFrame\WebApplication\Application($configs);
+$serviceLoader = new \MiniFrame\ServiceLoader($config);
+$application = new \MiniFrame\WebApplication\Application($serviceLoader);
 $application->serve();

@@ -12,7 +12,7 @@ abstract class Application extends BaseApplication
             $this->getConfigs()->get('console_application.name'),
             $this->getConfigs()->get('console_application.version')
         );
-        $symfonyConsoleApp->getHelperSet()->set(new ApplicationHelper($this));
+        $symfonyConsoleApp->getHelperSet()->set(new ServiceLoaderHelper($this->getServiceLoader()));
         $this->initCommands($symfonyConsoleApp);
         $symfonyConsoleApp->run();
     }

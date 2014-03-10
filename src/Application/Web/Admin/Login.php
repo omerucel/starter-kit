@@ -2,47 +2,38 @@
 
 namespace Application\Web\Admin;
 
-use Application\Entity\UserRepository;
 use Application\Web\Admin\Form\LoginForm;
 
 class Login extends BaseController
 {
     public function get()
     {
-        $form = new LoginForm($this);
+        $form = new LoginForm($this->getServiceLoader());
 
         $templateParams = array(
             'form' => $form,
-            'recaptcha_public_key' => $this->getConfigs()->get('recaptcha.public_key')
         );
-        return $this->render('admin/login.twig', $templateParams);
+
+        return $this->renderPage($templateParams);
     }
 
     public function post()
     {
-        $templateParams = [];
+        $templateParams = array();
 
-        $form = new LoginForm($this);
+        $form = new LoginForm($this->getServiceLoader());
         $form->loadParamsFromRequest();
 
         if ($form->isValid()) {
-            /**
-             * @var UserRepository $userRepository
-             */
-            $userRepository = $this->getEntityManager()->getRepository('Application\Entity\User');
-            $user = $userRepository->findOneByUsernameOrEmail($form->username);
+            $user = $this->getAuthService()->authenticate($form->username, $form->password);
 
-            if ($user != null && $user->passwordVerify($form->password)) {
-                $this->currentUser = $user; // TODO : Change with setter.
+            if ($user != null) {
+                $this->getAuthService()->checkPermission('admin.login');
 
-                if ($this->hasPermission('admin.login')) {
-                    $this->newUserActivity('admin.login');
-                    $this->getSession()->set('admin_user_id', $user->getId());
-                    return $this->redirect('/admin');
-                } else {
-                    $templateParams['message'] = 'Yetkisiz erişim.';
-                    $this->getDefaultLogger()->warning('Yetkisiz erişim.', array('username' => $user->getUsername()));
-                }
+                $this->getAuthService()->login($user);
+                $this->getAuthService()->newUserActivity('admin.login');
+
+                return $this->redirect('/admin');
             } else {
                 $this->getDefaultLogger()->warning(
                     'Geçersiz bilgilerle giriş yapılmaya çalışıldı.',
@@ -60,6 +51,16 @@ class Login extends BaseController
 
         $templateParams['message_type'] = 'danger';
         $templateParams['form'] = $form;
+
+        return $this->renderPage($templateParams);
+    }
+
+    /**
+     * @param array $templateParams
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function renderPage(array $templateParams = array())
+    {
         $templateParams['recaptcha_public_key'] = $this->getConfigs()->get('recaptcha.public_key');
         return $this->render('admin/login.twig', $templateParams);
     }

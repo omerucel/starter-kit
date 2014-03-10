@@ -5,34 +5,41 @@ namespace MiniFrame;
 abstract class BaseService
 {
     /**
-     * @var BaseApplication
+     * @var ServiceLoader
      */
-    protected $application;
+    protected $serviceLoader;
 
     /**
-     * @param BaseApplication $application
+     * @param ServiceLoader $serviceLoader
      */
-    public function __construct(BaseApplication $application)
+    public function __construct(ServiceLoader $serviceLoader)
     {
-        $this->application = $application;
+        $this->serviceLoader = $serviceLoader;
     }
 
     /**
-     * @return BaseApplication
+     * @return ServiceLoader
      */
-    public function getApplication()
+    public function getServiceLoader()
     {
-        return $this->application;
+        return $this->serviceLoader;
     }
 
     /**
-     * Ayarlara erişmek için yardımcı metod.
-     *
      * @return Config
      */
     public function getConfigs()
     {
-        return $this->getApplication()->getConfigs();
+        return $this->getServiceLoader()->getConfigs();
+    }
+
+    /**
+     * @param $name
+     * @return BaseService
+     */
+    public function getService($name)
+    {
+        return $this->getServiceLoader()->getService($name);
     }
 
     public function init()

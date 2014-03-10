@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="Application\Entity\UserRepository")
+ * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  */
 class User
 {
@@ -84,7 +84,7 @@ class User
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
 
     /**
@@ -112,7 +112,7 @@ class User
     }
 
     /**
-     * @param \Application\Entity\Role $role
+     * @param Role $role
      */
     public function setRole(Role $role)
     {
@@ -120,7 +120,7 @@ class User
     }
 
     /**
-     * @return \Application\Entity\Role
+     * @return Role
      */
     public function getRole()
     {
@@ -189,7 +189,7 @@ class User
     public function generatePassword()
     {
         $password = Security::randomPassword();
-        $this->setPassword(password_hash($password, PASSWORD_BCRYPT));
+        $this->setPassword($password);
         return $password;
     }
 

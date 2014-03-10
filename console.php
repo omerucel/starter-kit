@@ -4,7 +4,8 @@
 $loader = include_once 'vendor/autoload.php';
 
 // Configs
-$configs = include('app/configs/config.php');
+$config = include('app/configs/config.php');
 
-$application = new \Application\Console\Application($configs);
+$serviceLoader = new \MiniFrame\ServiceLoader($config);
+$application = new \Application\Console\Application($serviceLoader);
 $application->serve();

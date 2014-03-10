@@ -7,11 +7,4 @@ use MiniFrame\WebApplication\Controller;
 
 abstract class BaseController extends Controller
 {
-    /**
-     * @return Site
-     */
-    public function getModule()
-    {
-        return $this->module;
-    }
 }

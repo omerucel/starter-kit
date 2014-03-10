@@ -63,7 +63,7 @@ class SessionHandlerService extends BaseService
         /**
          * @var PdoService $pdoService
          */
-        $pdoService = $this->getApplication()->getService('pdo');
+        $pdoService = $this->getService('pdo');
         $pdo = $pdoService->getPdo();
         $pdoHandler = new PdoSessionHandler($pdo, $this->getConfigs()->getArray('session.handler.pdo'));
         return $pdoHandler;

@@ -2,24 +2,24 @@
 
 namespace MiniFrame\WebApplication;
 
-use MiniFrame\BaseApplication;
 use MiniFrame\Extra\Service\HttpFoundationService;
 use MiniFrame\Extra\Service\MonologService;
+use MiniFrame\ServiceLoader;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class Module
 {
     /**
-     * @var BaseApplication
+     * @var ServiceLoader
      */
-    protected $application;
+    protected $serviceLoader;
 
     /**
-     * @param BaseApplication $application
+     * @param ServiceLoader $serviceLoader
      */
-    public function __construct(BaseApplication $application)
+    public function __construct(ServiceLoader $serviceLoader)
     {
-        $this->application = $application;
+        $this->serviceLoader = $serviceLoader;
     }
 
     /**
@@ -30,11 +30,11 @@ abstract class Module
     }
 
     /**
-     * @return Application
+     * @return ServiceLoader
      */
-    public function getApplication()
+    public function getServiceLoader()
     {
-        return $this->application;
+        return $this->serviceLoader;
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class Module
         /**
          * @var Controller $controller
          */
-        $controller = new $controllerClass($this);
+        $controller = new $controllerClass($this->getServiceLoader());
 
         /**
          * @var Response $response
@@ -82,7 +82,7 @@ abstract class Module
                 /**
                  * @var HttpFoundationService $serviceHelper
                  */
-                $serviceHelper = $this->getApplication()->getService('http_foundation');
+                $serviceHelper = $this->getServiceLoader()->getService('http_foundation');
                 $response = $serviceHelper->getResponse();
             }
         }
@@ -123,11 +123,7 @@ abstract class Module
         $message = $exception->getMessage() . ' ' . $exception->getTraceAsString();
         $message = str_replace("\n", '', $message);
 
-        /**
-         * @var MonologService $monologService;
-         */
-        $monologService = $this->getApplication()->getService('monolog');
-        $monologService->getDefaultLogger()->error($message);
+        $this->getDefaultLogger()->error($message);
         $this->handleException($exception);
     }
 
@@ -149,11 +145,7 @@ abstract class Module
             $message = $errNo . ' ' . $errStr . ' ' . $errFile . ':' . $errLine;
             $message = str_replace("\n", '', $message);
 
-            /**
-             * @var MonologService $monologService;
-             */
-            $monologService = $this->getApplication()->getService('monolog');
-            $monologService->getDefaultLogger()->error($message);
+            $this->getDefaultLogger()->error($message);
             $this->handleFatalError($errStr, $errNo, $errFile, $errLine);
         }
     }
@@ -172,4 +164,16 @@ abstract class Module
      * @return mixed
      */
     abstract public function handleFatalError($errStr, $errNo, $errFile, $errLine);
+
+    /**
+     * @return \Monolog\Logger
+     */
+    public function getDefaultLogger()
+    {
+        /**
+         * @var MonologService $monologService;
+         */
+        $monologService = $this->getServiceLoader()->getService('monolog');
+        return $monologService->getDefaultLogger();
+    }
 }

@@ -1,8 +1,10 @@
 <?php
 
-namespace Application\Entity;
+namespace Application\Repository;
 
+use Application\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 class UserRepository extends EntityRepository
 {
@@ -32,8 +34,12 @@ class UserRepository extends EntityRepository
         $sql = 'SELECT u FROM Application\Entity\User u'
             . ' WHERE u.username = :username OR u.email = :username';
 
-        return $this->getEntityManager()->createQuery($sql)
-            ->setParameter('username', $username)
-            ->getSingleResult();
+        try {
+            return $this->getEntityManager()->createQuery($sql)
+                ->setParameter('username', $username)
+                ->getSingleResult();
+        } catch (NoResultException $exception) {
+            return null;
+        }
     }
 }

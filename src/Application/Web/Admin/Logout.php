@@ -6,8 +6,9 @@ class Logout extends BaseController
 {
     public function get()
     {
-        $this->newUserActivity('admin.logout');
-        $this->getSession()->remove('admin_user_id');
+        $this->getAuthService()->checkPermission('admin.logout');
+        $this->getAuthService()->logout();
+
         return $this->redirect('/admin');
     }
 }

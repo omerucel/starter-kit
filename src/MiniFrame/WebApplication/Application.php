@@ -4,32 +4,23 @@ namespace MiniFrame\WebApplication;
 
 use MiniFrame\BaseApplication;
 use MiniFrame\Extra\Service\MonologService;
+use MiniFrame\Extra\Service\RouterService;
+use MiniFrame\ServiceLoader;
 
 class Application extends BaseApplication
 {
     /**
      * @var array
      */
-    protected $routes;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    /**
-     * @var array
-     */
     protected $modules;
 
     /**
-     * @param array $configs
+     * @param ServiceLoader $serviceLoader
      */
-    public function __construct(array $configs = array())
+    public function __construct(ServiceLoader $serviceLoader)
     {
-        parent::__construct($configs);
+        parent::__construct($serviceLoader);
         $this->modules = array();
-        $this->routes = $this->getConfigs()->getArray('web_application.router.routes');
     }
 
     public function serve()
@@ -41,10 +32,12 @@ class Application extends BaseApplication
         if ($route == null) {
             $controllerClass = $this->getConfigs()->get('web_application.default_not_found_controller');
             $module = $this->discoverModule($controllerClass);
+            $this->getServiceLoader()->setService('current_module', $module);
             $module->dispatch($controllerClass);
         } else {
             $controllerClass = $route->getControllerClass();
             $module = $this->discoverModule($controllerClass);
+            $this->getServiceLoader()->setService('current_module', $module);
             $module->dispatch($controllerClass, $route->getRequestMethod(), $route->getParams());
         }
     }
@@ -57,21 +50,8 @@ class Application extends BaseApplication
         /**
          * @var MonologService $monologService
          */
-        $monologService = $this->getService('monolog');
+        $monologService = $this->getServiceLoader()->getService('monolog');
         $monologService->getDefaultLogger()->error($moduleClass . ' not found.');
-    }
-
-    /**
-     * @return Router
-     */
-    public function getRouter()
-    {
-        if ($this->router == null) {
-            $routeTokens = $this->getConfigs()->getArray('web_application.router.tokens');
-            $this->router = new Router($this->routes, $routeTokens);
-        }
-
-        return $this->router;
     }
 
     /**
@@ -89,7 +69,7 @@ class Application extends BaseApplication
         // Daha önce yüklenmişse ilgili objeyi dön yoksa oluştur.
         $init = false;
         if (!isset($this->modules[$moduleClass])) {
-            $this->modules[$moduleClass] = new $moduleClass($this);
+            $this->modules[$moduleClass] = new $moduleClass($this->getServiceLoader());
             $init = true;
         }
 
@@ -103,5 +83,17 @@ class Application extends BaseApplication
         }
 
         return $module;
+    }
+
+    /**
+     * @return Router
+     */
+    public function getRouter()
+    {
+        /**
+         * @var RouterService $routerService
+         */
+        $routerService = $this->getServiceLoader()->getService('router');
+        return $routerService->getRouter();
     }
 }

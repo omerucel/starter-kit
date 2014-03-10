@@ -27,31 +27,26 @@ class DoctrineService extends BaseService
             /**
              * @var PdoService $pdoService
              */
-            $pdoService = $this->getApplication()->getService('pdo');
+            $pdoService = $this->getService('pdo');
             $conn = array(
                 'pdo' => $pdoService->getPdo()
             );
 
+            // TODO : Geliştirme ortamı haricinde önbellekleme aktifleştirilmeli.
             $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
 
             if ($sqlLogEnable) {
-                $config->setSQLLogger($this->createSqlLogger());
+                /**
+                 * @var MonologService $monologService
+                 */
+                $monologService = $this->getService('monolog');
+                $debugStack = new DebugStack($monologService->getSqlLogger());
+
+                $config->setSQLLogger($debugStack);
             }
             $this->entityManager = EntityManager::create($conn, $config);
         }
 
         return $this->entityManager;
-    }
-
-    /**
-     * @return DebugStack
-     */
-    protected function createsqlLogger()
-    {
-        /**
-         * @var MonologService $monologService
-         */
-        $monologService = $this->getApplication()->getService('monolog');
-        return new DebugStack($monologService->getSqlLogger());
     }
 }

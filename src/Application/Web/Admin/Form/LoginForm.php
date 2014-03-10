@@ -2,8 +2,8 @@
 
 namespace Application\Web\Admin\Form;
 
-use Application\Web\BaseForm;
 use MiniFrame\Extra\Service\RecaptchaService;
+use MiniFrame\WebApplication\BaseForm;
 use Respect\Validation\Validator;
 
 class LoginForm extends BaseForm
@@ -14,8 +14,8 @@ class LoginForm extends BaseForm
 
     public function loadParamsFromRequest()
     {
-        $this->username = $this->getController()->getRequest()->get('username');
-        $this->password = $this->getController()->getRequest()->get('password');
+        $this->username = $this->getRequest()->get('username');
+        $this->password = $this->getRequest()->get('password');
     }
 
     /**
@@ -30,11 +30,7 @@ class LoginForm extends BaseForm
 
     public function validateSecurityCode()
     {
-        /**
-         * @var RecaptchaService $recaptchaService
-         */
-        $recaptchaService = $this->getController()->getService('recaptcha');
-        if (!$recaptchaService->getCaptcha()->check()->isValid()) {
+        if (!$this->getRecaptcha()->check()->isValid()) {
             $this->setMessage('security_code', 'Geçersiz güvenlik kodu.');
         }
     }
@@ -51,5 +47,21 @@ class LoginForm extends BaseForm
         if (!Validator::create()->notEmpty()->validate($this->password)) {
             $this->setMessage('password_empty', 'Şifre gerekli.');
         }
+    }
+
+    /**
+     * @return \Captcha\Captcha
+     */
+    public function getRecaptcha()
+    {
+        return $this->getRecaptchaService()->getCaptcha();
+    }
+
+    /**
+     * @return RecaptchaService
+     */
+    public function getRecaptchaService()
+    {
+        return $this->getServiceLoader()->getService('recaptcha');
     }
 }

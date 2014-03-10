@@ -7,4 +7,6 @@ if (!$environment) {
     $environment = 'production';
 }
 
-return include('config_' . $environment . '.php');
+$configs = include('config_' . $environment . '.php');
+$config = new \MiniFrame\Config($configs);
+return $config;

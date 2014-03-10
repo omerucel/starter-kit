@@ -28,7 +28,7 @@ class Application extends \MiniFrame\ConsoleApplication\Application
          *
          * @var DoctrineService $doctrineService
          */
-        $doctrineService = $this->getService('doctrine');
+        $doctrineService = $this->getServiceLoader()->getService('doctrine');
         $symfonyConsoleApp->setHelperSet(ConsoleRunner::createHelperSet($doctrineService->getEntityManager()));
         ConsoleRunner::addCommands($symfonyConsoleApp);
 

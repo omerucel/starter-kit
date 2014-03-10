@@ -4,27 +4,29 @@ namespace MiniFrame\WebApplication;
 
 use MiniFrame\BaseService;
 use MiniFrame\Config;
+use MiniFrame\Extra\Service\AuthService;
 use MiniFrame\Extra\Service\DoctrineService;
 use MiniFrame\Extra\Service\HttpFoundationService;
 use MiniFrame\Extra\Service\MonologService;
 use MiniFrame\Extra\Service\SessionHandlerService;
 use MiniFrame\Extra\Service\TwigService;
+use MiniFrame\ServiceLoader;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller
 {
     /**
-     * @var Module
+     * @var ServiceLoader
      */
-    protected $module;
+    protected $serviceLoader;
 
     /**
-     * @param Module $module
+     * @param ServiceLoader $serviceLoader
      */
-    public function __construct(Module $module)
+    public function __construct(ServiceLoader $serviceLoader)
     {
-        $this->module = $module;
+        $this->serviceLoader = $serviceLoader;
     }
 
     /**
@@ -105,25 +107,6 @@ abstract class Controller
     {
         $headers['content-type'] = 'text/plain; charset=utf-8';
         return $this->getResponse()->create($content, $status, $headers);
-    }
-
-    /**
-     * @param $csvFileName
-     * @param $templateFile
-     * @param array $templateVariables
-     * @param int $status
-     * @return Response
-     */
-    protected function renderForCsv($csvFileName, $templateFile, $templateVariables = array(), $status = 200)
-    {
-        $response = $this->render($templateFile, $templateVariables, $status);
-        $response->headers->set('Content-Description', 'CSV File');
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . $csvFileName);
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response;
     }
 
     /**
@@ -226,41 +209,35 @@ abstract class Controller
     }
 
     /**
-     * Ana uygulama sınıfındaki servis oluşturma metoduna erişimi kolaylaştırır.
-     *
+     * @return AuthService
+     */
+    public function getAuthService()
+    {
+        return $this->getService('auth');
+    }
+
+    /**
      * @param $name
      * @return BaseService
      */
     public function getService($name)
     {
-        return $this->getModule()->getApplication()->getService($name);
+        return $this->getServiceLoader()->getService($name);
     }
 
     /**
-     * Ayar sınıfına erişimi kolaylaştırır.
-     *
      * @return Config
      */
     public function getConfigs()
     {
-        return $this->getModule()->getApplication()->getConfigs();
+        return $this->getServiceLoader()->getConfigs();
     }
 
     /**
-     * Uygulama sınıfına erişimi kolaylaştırır.
-     *
-     * @return Application
+     * @return ServiceLoader
      */
-    public function getApplication()
+    public function getServiceLoader()
     {
-        return $this->getModule()->getApplication();
-    }
-
-    /**
-     * @return Module
-     */
-    public function getModule()
-    {
-        return $this->module;
+        return $this->serviceLoader;
     }
 }
