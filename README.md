@@ -77,9 +77,7 @@ $ APP_ENV=DEVELOPMENT php console.php migrations:migrate --configuration migrati
 
 ```bash
 $ APP_ENV=DEVELOPMENT php console.php application:init-roles
-$ APP_ENV=DEVELOPMENT php console.php application:create-user --username="admin" --role="super_user"
-Password : QgXlQhWQ
-$
+$ APP_ENV=DEVELOPMENT php console.php application:create-user --username="admin" --password="admin" --role="super_user" --email="omerucel@gmail.com"
 ```
 
 # Deployment

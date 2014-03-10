@@ -46,7 +46,12 @@ class InitRoles extends BaseCommand
         return array(
             'admin.login',
             'admin.logout',
-            'admin.dashboard'
+            'admin.dashboard',
+
+            'admin.permissions.list',
+            'admin.permissions.show',
+            'admin.permissions.save',
+            'admin.permissions.delete'
         );
     }
 }
