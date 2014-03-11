@@ -42,7 +42,6 @@ class AuthService extends BaseService
 
     public function logout()
     {
-        $this->newUserActivity('admin.logout');
         $this->getSession()->remove('user_id');
     }
 
