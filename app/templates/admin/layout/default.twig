@@ -9,6 +9,10 @@
 
             return false;
         }
+
+        function selectAll(object) {
+            $('input[data-select-all=1]').prop('checked', object.checked);
+        }
     </script>
 {% endblock %}
 
