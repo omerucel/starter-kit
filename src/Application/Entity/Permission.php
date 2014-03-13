@@ -41,9 +41,17 @@ class Permission
      */
     private $rolePermissions;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="PermissionGroup", mappedBy="permission", cascade={"persist"})
+     */
+    private $groupPermissions;
+
     public function __construct()
     {
         $this->rolePermissions = new ArrayCollection();
+        $this->groupPermissions = new ArrayCollection();
     }
 
     /**
@@ -92,5 +100,21 @@ class Permission
     public function getRolePermissions()
     {
         return $this->rolePermissions;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $groupPermissions
+     */
+    public function setGroupPermissions(ArrayCollection $groupPermissions)
+    {
+        $this->groupPermissions = $groupPermissions;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getGroupPermissions()
+    {
+        return $this->groupPermissions;
     }
 }

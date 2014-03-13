@@ -48,10 +48,20 @@ class InitRoles extends BaseCommand
             'admin.logout',
             'admin.dashboard',
 
+            'admin.permissions.group.list',
+            'admin.permissions.group.show',
+            'admin.permissions.group.save',
+            'admin.permissions.group.delete',
+
             'admin.permissions.list',
             'admin.permissions.show',
             'admin.permissions.save',
-            'admin.permissions.delete'
+            'admin.permissions.delete',
+
+            'admin.roles.list',
+            'admin.roles.show',
+            'admin.roles.save',
+            'admin.roles.delete'
         );
     }
 }
