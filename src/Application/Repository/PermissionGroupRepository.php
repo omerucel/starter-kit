@@ -8,15 +8,21 @@ class PermissionGroupRepository extends EntityRepository
 {
     /**
      * @param $name
+     * @param int $exceptId
      * @return bool
      */
-    public function isNameUsing($name)
+    public function isNameUsing($name, $exceptId = 0)
     {
-        $sql = 'SELECT COUNT(pg.id) FROM \Application\Entity\PermissionGroup pg'
-            . ' WHERE pg.name = :name';
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\PermissionGroup')->createQueryBuilder('pg');
+        $qb->select('COUNT(pg.id)')->where('pg.name = :name');
 
-        return $this->getEntityManager()->createQuery($sql)
-            ->setParameter('name', $name)
-            ->getSingleScalarResult() > 0;
+        if ($exceptId > 0) {
+            $qb->andWhere($qb->expr()->not('pg.id = :id'));
+            $qb->setParameter(':id', $exceptId);
+        }
+
+        $qb->setParameter(':name', $name);
+
+        return $qb->getQuery()->getSingleScalarResult() > 0;
     }
 }

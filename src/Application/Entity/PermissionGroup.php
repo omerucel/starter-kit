@@ -30,7 +30,7 @@ class PermissionGroup
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="PermissionGroup", mappedBy="group", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="PermissionGroupPermission", mappedBy="group", cascade={"persist"})
      */
     private $groupPermissions;
 

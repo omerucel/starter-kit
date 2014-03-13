@@ -9,6 +9,46 @@ use Doctrine\ORM\NoResultException;
 class UserRepository extends EntityRepository
 {
     /**
+     * @param $email
+     * @param int $exceptId
+     * @return bool
+     */
+    public function isEmailUsing($email, $exceptId = 0)
+    {
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\User')->createQueryBuilder('u');
+        $qb->select('COUNT(u.id)')->where('u.email = :email');
+
+        if ($exceptId > 0) {
+            $qb->andWhere($qb->expr()->not('u.id = :id'));
+            $qb->setParameter(':id', $exceptId);
+        }
+
+        $qb->setParameter(':email', $email);
+
+        return $qb->getQuery()->getSingleScalarResult() > 0;
+    }
+
+    /**
+     * @param $username
+     * @param int $exceptId
+     * @return bool
+     */
+    public function isUsernameUsing($username, $exceptId = 0)
+    {
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\User')->createQueryBuilder('u');
+        $qb->select('COUNT(u.id)')->where('u.username = :username');
+
+        if ($exceptId > 0) {
+            $qb->andWhere($qb->expr()->not('u.id = :id'));
+            $qb->setParameter(':id', $exceptId);
+        }
+
+        $qb->setParameter(':username', $username);
+
+        return $qb->getQuery()->getSingleScalarResult() > 0;
+    }
+
+    /**
      * @param $key
      * @return bool
      */
