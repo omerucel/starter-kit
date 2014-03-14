@@ -4,6 +4,7 @@ namespace Application\Web\Admin;
 
 use Application\Entity\Permission;
 use Application\Web\Admin\Form\PermissionSaveForm;
+use Application\Web\Exception\RecordNotFound;
 
 class PermissionSave extends BaseController
 {
@@ -13,6 +14,10 @@ class PermissionSave extends BaseController
 
         $form = new PermissionSaveForm($this->getServiceLoader());
         $form->loadParamsFromCurrentPermission();
+
+        if ($form->id > 0 && $form->getCurrentPermission() == null) {
+            throw new RecordNotFound(sprintf('%d ID numaralı izin sistemde bulunamadı.', $form->id));
+        }
 
         $templateParams = array(
             'form' => $form

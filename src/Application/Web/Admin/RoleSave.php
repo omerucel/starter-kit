@@ -6,6 +6,7 @@ use Application\Entity\Role;
 use Application\Entity\RolePermission;
 use Application\Repository\PermissionRepository;
 use Application\Web\Admin\Form\RoleSaveForm;
+use Application\Web\Exception\RecordNotFound;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class RoleSave extends BaseController
@@ -16,6 +17,10 @@ class RoleSave extends BaseController
 
         $form = new RoleSaveForm($this->getServiceLoader());
         $form->loadParamsFromCurrentRole();
+
+        if ($form->id > 0 && $form->getCurrentRole() == null) {
+            throw new RecordNotFound(sprintf('%d ID numaralı rol sistemde bulunamadı.', $form->id));
+        }
 
         $templateParams = array(
             'form' => $form

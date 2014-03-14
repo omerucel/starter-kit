@@ -9,6 +9,7 @@ use Application\Entity\PermissionGroupPermission;
 use Application\Repository\PermissionGroupRepository;
 use Application\Repository\PermissionRepository;
 use Application\Web\Admin\Form\PermissionGroupSaveForm;
+use Application\Web\Exception\RecordNotFound;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class PermissionGroupSave extends BaseController
@@ -19,6 +20,10 @@ class PermissionGroupSave extends BaseController
 
         $form = new PermissionGroupSaveForm($this->getServiceLoader());
         $form->loadParamsFromCurrentGroup();
+
+        if ($form->id > 0 && $form->getCurrentGroup() == null) {
+            throw new RecordNotFound(sprintf('%d ID numaralı izin grubu sistemde bulunamadı.', $form->id));
+        }
 
         $templateParams = array(
             'form' => $form

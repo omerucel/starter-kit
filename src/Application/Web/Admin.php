@@ -2,6 +2,7 @@
 
 namespace Application\Web;
 
+use Application\Web\Exception\RecordNotFound;
 use MiniFrame\Extra\Service\AuthService\Exception\AccessDeniedException;
 use MiniFrame\WebApplication\Module;
 
@@ -15,6 +16,8 @@ class Admin extends Module
     {
         if ($exception instanceof AccessDeniedException) {
             $this->dispatch('Application\Web\Admin\AccessDenied');
+        } elseif ($exception instanceof RecordNotFound) {
+            $this->dispatch('Application\Web\Admin\RecordNotFound');
         } else {
             $this->dispatch('Application\Web\Admin\InternalError');
         }

@@ -1,0 +1,15 @@
+{% extends 'admin/layout/empty.twig' %}
+
+{% block title %}Kayıt Bulunamadı{% endblock %}
+
+{% block main_content %}
+    <div class="container" style="margin-top: 100px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <p>Ulaşmaya çalıştığınız kayıt sistemde bulunamadı. <a href="{{ site_url('/admin') }}">Yönetim paneli anasayfasına dönmek için tıklayınız.</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@ namespace Application\Web\Admin;
 
 use Application\Entity\User;
 use Application\Web\Admin\Form\UserSaveForm;
+use Application\Web\Exception\RecordNotFound;
 
 class UserSave extends BaseController
 {
@@ -13,6 +14,10 @@ class UserSave extends BaseController
 
         $form = new UserSaveForm($this->getServiceLoader());
         $form->loadParamsFromCurrentUser();
+
+        if ($form->id > 0 && $form->getCurrentUser() == null) {
+            throw new RecordNotFound(sprintf('%d ID numaralı kullanıcı sistemde bulunamadı.', $form->id));
+        }
 
         $templateParams = array(
             'form' => $form
