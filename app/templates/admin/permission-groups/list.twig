@@ -12,11 +12,14 @@
 
                 {% include "admin/embed/message.twig" %}
 
-                <form method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
-                    <div class="form-group">
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-6">
                         <a href="{{ site_url('/admin/permission-groups/save') }}" class="btn btn-success"><i class="fa fa-plus"></i> Yeni İzin Grubu Ekle</a>
-                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                        <button type="submit" onclick="$('#list-form').submit();" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
                     </div>
+                </div>
+
+                <form id="list-form" method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
                     <div class="form-group">
                         <table class="table table-bordered">
                             <thead>

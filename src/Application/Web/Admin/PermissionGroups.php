@@ -39,6 +39,10 @@ class PermissionGroups extends BaseController
         $ids = $this->getRequest()->get('id', array());
         $page = $this->getRequest()->get('page', 1);
 
+        if (!is_array($ids) || empty($ids)) {
+            return $this->redirect('/admin/permission-groups?page=' . $page);
+        }
+
         $qb = $this->getEntityManager()->getRepository('Application\Entity\PermissionGroup')->createQueryBuilder('pg');
         $affectedRows = $qb->where($qb->expr()->in('pg.id', $ids))->delete()->getQuery()->execute();
 

@@ -12,11 +12,14 @@
 
                 {% include "admin/embed/message.twig" %}
 
-                <form method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
-                    <div class="form-group">
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-6">
                         <a href="{{ site_url('/admin/roles/save') }}" class="btn btn-success btn-mini"><i class="fa fa-plus"></i> Yeni Rol Ekle</a>
-                        <button type="submit" class="btn btn-danger btn-mini"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                        <button type="button" onclick="$('#list-form').submit();" class="btn btn-danger btn-mini"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
                     </div>
+                </div>
+
+                <form id="list-form" method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
                     <div class="form-group">
                         <table class="table table-bordered">
                             <thead>

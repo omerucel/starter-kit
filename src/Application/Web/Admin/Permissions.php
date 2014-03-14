@@ -39,6 +39,10 @@ class Permissions extends BaseController
         $ids = $this->getRequest()->get('id', array());
         $page = $this->getRequest()->get('page', 1);
 
+        if (!is_array($ids) || empty($ids)) {
+            return $this->redirect('/admin/permissions?page=' . $page);
+        }
+
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Permission')->createQueryBuilder('p');
         $affectedRows = $qb->where($qb->expr()->in('p.id', $ids))->delete()->getQuery()->execute();
 

@@ -39,6 +39,10 @@ class Roles extends BaseController
         $ids = $this->getRequest()->get('id', array());
         $page = $this->getRequest()->get('page', 1);
 
+        if (!is_array($ids) || empty($ids)) {
+            return $this->redirect('/admin/roles?page=' . $page);
+        }
+
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Role')->createQueryBuilder('r');
         $affectedRows = $qb->where($qb->expr()->in('r.id', $ids))->delete()->getQuery()->execute();
 
