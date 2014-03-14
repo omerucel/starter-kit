@@ -7,11 +7,11 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrap3View;
 
-class PermissionGroups extends BaseController
+class Roles extends BaseController
 {
     public function get()
     {
-        $this->getAuthService()->checkPermission('admin.permissions.group.list');
+        $this->getAuthService()->checkPermission('admin.roles.list');
 
         $pager = $this->getPager();
         $paginationHtml = $this->getPaginationHtml($pager);
@@ -24,25 +24,25 @@ class PermissionGroups extends BaseController
         if ($this->getSession()->has('deleted_item')) {
             $deletedItem = $this->getSession()->get('deleted_item', 0);
             $this->getSession()->remove('deleted_item');
-            $templateParams['message'] = $deletedItem . ' grup silindi.';
+            $templateParams['message'] = $deletedItem . ' rol silindi.';
             $templateParams['message_type'] = 'success';
         }
 
-        return $this->render('admin/permission-groups/list.twig', $templateParams);
+        return $this->render('admin/roles/list.twig', $templateParams);
     }
 
     public function post()
     {
-        $this->getAuthService()->checkPermission('admin.permissions.group.delete');
+        $this->getAuthService()->checkPermission('admin.roles.delete');
 
         $ids = $this->getRequest()->get('id', array());
         $page = $this->getRequest()->get('page', 1);
 
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\PermissionGroup')->createQueryBuilder('pg');
-        $affectedRows = $qb->where($qb->expr()->in('pg.id', $ids))->delete()->getQuery()->execute();
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Role')->createQueryBuilder('r');
+        $affectedRows = $qb->where($qb->expr()->in('r.id', $ids))->delete()->getQuery()->execute();
 
         $this->getSession()->set('deleted_item', $affectedRows);
-        return $this->redirect('/admin/permission-groups?page=' . $page);
+        return $this->redirect('/admin/roles?page=' . $page);
     }
 
     /**
@@ -52,7 +52,7 @@ class PermissionGroups extends BaseController
     protected function getPaginationHtml(Pagerfanta $pager)
     {
         $routeGenerator = function ($page) {
-            return '/admin/permission-groups?page=' . $page;
+            return '/admin/roles?page=' . $page;
         };
         $pagerView = new TwitterBootstrap3View();
         $options = array(
@@ -68,9 +68,9 @@ class PermissionGroups extends BaseController
      */
     protected function getPager()
     {
-        $query = $this->getEntityManager()->getRepository('Application\Entity\PermissionGroup')
-            ->createQueryBuilder('pg')
-            ->orderBy('pg.name', Criteria::ASC)
+        $query = $this->getEntityManager()->getRepository('Application\Entity\Role')
+            ->createQueryBuilder('r')
+            ->orderBy('r.name', Criteria::ASC)
             ->getQuery();
 
         $page = intval($this->getRequest()->get('page', 1));
