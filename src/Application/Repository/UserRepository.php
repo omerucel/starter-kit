@@ -84,4 +84,14 @@ class UserRepository extends EntityRepository
             return null;
         }
     }
+
+    /**
+     * @param array $ids
+     * @return mixed
+     */
+    public function deleteIds(array $ids)
+    {
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\User')->createQueryBuilder('u');
+        return $qb->where($qb->expr()->in('u.id', $ids))->delete()->getQuery()->execute();
+    }
 }

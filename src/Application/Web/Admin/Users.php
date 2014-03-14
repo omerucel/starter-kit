@@ -3,6 +3,8 @@
 namespace Application\Web\Admin;
 
 use Application\Repository\RoleRepository;
+use Application\Repository\UserRepository;
+use Application\Web\Admin\QueryString\UsersQS;
 use Doctrine\Common\Collections\Criteria;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
@@ -10,6 +12,11 @@ use Pagerfanta\View\TwitterBootstrap3View;
 
 class Users extends BaseController
 {
+    /**
+     * @var UsersQS
+     */
+    protected $userQS;
+
     public function get()
     {
         $this->getAuthService()->checkPermission('admin.users.list');
@@ -21,7 +28,7 @@ class Users extends BaseController
             'pager' => $pager,
             'pagination_html' => $paginationHtml,
             'all_roles' => $this->getRoleRepository()->findAll(),
-            'role_id' => $this->getRequest()->get('role_id')
+            'qs' => $this->getUsersQS()
         );
 
         if ($this->getSession()->has('deleted_item')) {
@@ -38,16 +45,14 @@ class Users extends BaseController
     {
         $this->getAuthService()->checkPermission('admin.users.delete');
 
-        // Parametreleri al ve kayıtları sil.
         $ids = $this->getRequest()->get('id', array());
-        $page = $this->getRequest()->get('page', 1);
+        $redirectUrl = '/admin/users?' . $this->getUsersQS()->createQueryString();
 
         if (empty($ids)) {
-            return $this->redirect('/admin/users?page=' . $page);
+            return $this->redirect($redirectUrl);
         }
 
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\User')->createQueryBuilder('u');
-        $affectedRows = $qb->where($qb->expr()->in('u.id', $ids))->delete()->getQuery()->execute();
+        $affectedRows = $this->getUserRepository()->deleteIds($ids);
 
         // Yapılan işlem kullanıcı aktivitesi olarak ekleniyor.
         $this->getAuthService()
@@ -55,7 +60,7 @@ class Users extends BaseController
 
         // Silinen kayıt sayısı gösterilmek üzere kayıt altına alınıyor.
         $this->getSession()->set('deleted_item', $affectedRows);
-        return $this->redirect('/admin/users?page=' . $page);
+        return $this->redirect($redirectUrl);
     }
 
     /**
@@ -64,9 +69,12 @@ class Users extends BaseController
      */
     protected function getPaginationHtml(Pagerfanta $pager)
     {
-        $routeGenerator = function ($page) {
-            return '/admin/users?page=' . $page;
+        $userController = $this;
+        $routeGenerator = function ($page) use ($userController) {
+            $qs = $userController->getUsersQS()->createQueryString(array('page')) . '&page=' . $page;
+            return '/admin/users?' . $qs;
         };
+
         $pagerView = new TwitterBootstrap3View();
         $options = array(
             'prev_message' => 'Önceki',
@@ -85,24 +93,36 @@ class Users extends BaseController
             ->createQueryBuilder('u')
             ->orderBy('u.username', Criteria::ASC);
 
+        // Arama sonucuna göre filtrele
+        if ($this->getUsersQS()->hasSearch()) {
+            $likeStr = '%' . $this->getUsersQS()->getSearch() . '%';
+            $query
+                ->where(
+                    $query->expr()->orX(
+                        $query->expr()->like('u.username', $query->expr()->literal($likeStr)),
+                        $query->expr()->like('u.name', $query->expr()->literal($likeStr)),
+                        $query->expr()->like('u.surname', $query->expr()->literal($likeStr)),
+                        $query->expr()->like('u.email', $query->expr()->literal($likeStr))
+                    )
+                );
+        }
+
         // Role göre filtrele
-        $roleId = intval($this->getRequest()->get('role_id'));
-        if ($roleId > 0) {
+        if ($this->getUsersQS()->hasRoleId()) {
             $query
                 ->join('u.role', 'r')
                 ->where('r.id = :role_id')
-                ->setParameter('role_id', $roleId);
+                ->setParameter('role_id', $this->getUsersQS()->getRoleId());
         }
 
         $query = $query->getQuery();
 
-        $page = intval($this->getRequest()->get('page', 1));
         $adapter = new DoctrineORMAdapter($query);
         $pager = new Pagerfanta($adapter);
 
         try {
             $pager->setMaxPerPage(10)
-                ->setCurrentPage($page);
+                ->setCurrentPage($this->getUsersQS()->getPage());
         } catch (\Exception $exception) {
 
         }
@@ -111,10 +131,30 @@ class Users extends BaseController
     }
 
     /**
+     * @return UsersQS
+     */
+    public function getUsersQS()
+    {
+        if ($this->userQS == null) {
+            $this->userQS = new UsersQS($this->getRequest());
+        }
+
+        return $this->userQS;
+    }
+
+    /**
      * @return RoleRepository
      */
     protected function getRoleRepository()
     {
         return $this->getEntityManager()->getRepository('Application\Entity\Role');
+    }
+
+    /**
+     * @return UserRepository
+     */
+    protected function getUserRepository()
+    {
+        return  $this->getEntityManager()->getRepository('Application\Entity\User');
     }
 }

@@ -25,28 +25,43 @@
 
                 {% include "admin/embed/message.twig" %}
 
-                <form method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
-                    <div class="row" style="margin-bottom: 10px;">
-                        <div class="col-md-6">
-                            <a href="{{ site_url('/admin/users/save') }}" class="btn btn-success"><i class="fa fa-plus"></i> Yeni Kullanıcı Ekle</a>
-                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-6">
+                        <a href="{{ site_url('/admin/users/save') }}" class="btn btn-success"><i class="fa fa-plus"></i> Yeni Kullanıcı Ekle</a>
+                        <button type="button" onclick="$('#list-form').submit();" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="pull-right">
+                            <form method="get" action="">
+                                <input type="hidden" name="role_id" value="{{ qs.params.role_id }}" />
+                                <input type="hidden" name="page" value="{{ qs.params.page }}" />
+                                <div class="input-group" style="width: 200px;margin-left: 10px;">
+                                    <input type="text" name="search" class="form-control input-sm" value="{{ qs.params.search }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-sm" type="submit">Ara</button>
+                                    </span>
+                                </div>
+                            </form>
                         </div>
-                        <div class="col-md-6">
-                            <div class="pull-right">
-                                <select style="width: 200px;" name="role_id" id="roles" onchange="document.location.href='{{ site_url('/admin/users') }}?role_id=' + this.value;">
-                                    <option>Bir Rol Seçin</option>
-                                    {% for role in all_roles %}
-                                        <option value="{{ role.getId() }}" {% if role.getId() == role_id %}selected="selected"{% endif %}>{{ role.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+
+                        <div class="pull-right">
+                            <select style="width: 200px;" name="role_id" id="roles" onchange="document.location.href='{{ site_url('/admin/users?%s', qs.createQueryString(['role_id'])) }}&role_id=' + this.value;">
+                                <option>Bir Rol Seçin</option>
+                                {% for role in all_roles %}
+                                    <option value="{{ role.getId() }}" {% if role.getId() == qs.params.role_id %}selected="selected"{% endif %}>{{ role.getName() }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
+                </div>
+
+                <form id="list-form" method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
                     <div class="form-group">
                         <table class="table table-bordered">
                             <thead>
                                 <th style="width: 30px;"><input type="checkbox" onchange="selectAll(this);" /></th>
                                 <th>Kullanıcı Adı</th>
+                                <th>Gerçek Adı</th>
                                 <th>Rolü</th>
                             </thead>
                             <tbody>
@@ -57,12 +72,13 @@
                                                 <input type="checkbox" name="id[]" data-select-all="1" value="{{ item.getId() }}" />
                                             </td>
                                             <td><a href="{{ site_url('/admin/users/save') }}?id={{ item.getId() }}">{{ item.getUsername() }}</a></td>
+                                            <td>{{ item.getFullName() }}</td>
                                             <td>{{ item.getRole().getName() }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="3">Herhangi kayıt bulunamadı.</td>
+                                        <td colspan="4">Herhangi kayıt bulunamadı.</td>
                                     </tr>
                                 {% endif %}
                             </tbody>
