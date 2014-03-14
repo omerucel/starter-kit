@@ -2,6 +2,7 @@
 
 namespace Application\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 
 class PermissionRepository extends EntityRepository
@@ -41,7 +42,7 @@ class PermissionRepository extends EntityRepository
 
     /**
      * @param array $ids
-     * @return array
+     * @return ArrayCollection
      */
     public function findIds(array $ids)
     {
@@ -49,6 +50,7 @@ class PermissionRepository extends EntityRepository
             ->createQueryBuilder('p')
             ->select('p');
 
-        return $qb->where($qb->expr()->in('p.id', $ids))->getQuery()->getResult();
+        $result = $qb->where($qb->expr()->in('p.id', $ids))->getQuery()->getResult();
+        return new ArrayCollection($result);
     }
 }

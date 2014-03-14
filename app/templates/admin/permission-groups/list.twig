@@ -1,0 +1,50 @@
+{% extends "admin/layout/default.twig" %}
+
+{% block title %}İzin Grupları Listesi{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <header class="page-header">
+                    <h1>İzin Grupları Listesi</h1>
+                </header>
+
+                {% include "admin/embed/message.twig" %}
+
+                <form method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
+                    <div class="form-group">
+                        <a href="{{ site_url('/admin/permission-groups/save') }}" class="btn btn-success"><i class="fa fa-plus"></i> Yeni İzin Grubu Ekle</a>
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                    </div>
+                    <div class="form-group">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th style="width: 30px;"><input type="checkbox" onchange="selectAll(this);" /></th>
+                                <th>İzin Grubu Adı</th>
+                            </thead>
+                            <tbody>
+                                {% if pager.isEmpty() == false %}
+                                    {% for item in pager %}
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="id[]" data-select-all="1" value="{{ item.getId() }}" />
+                                            </td>
+                                            <td><a href="{{ site_url('/admin/permission-groups/save') }}?id={{ item.getId() }}">{{ item.getName() }}</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="2">Herhangi kayıt bulunamadı.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+                {{ pagination_html|raw }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
