@@ -28,9 +28,10 @@ class Login extends BaseController
             $user = $this->getAuthService()->authenticate($form->username, $form->password);
 
             if ($user != null) {
-                $this->getAuthService()->checkPermission('admin.login');
-
+                // TODO : checkPermission oturum açma işleminden önce çalışmalı.
                 $this->getAuthService()->login($user);
+
+                $this->getAuthService()->checkPermission('admin.login');
                 $this->getAuthService()->newUserActivity('admin.login');
 
                 return $this->redirect('/admin');
