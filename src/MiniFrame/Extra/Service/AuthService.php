@@ -75,7 +75,7 @@ class AuthService extends BaseService
      */
     public function hasPermission($key)
     {
-        return $this->getUserRepository()->hasPermission($key);
+        return $this->getUserRepository()->hasPermission($this->getCurrentUser()->getId(), $key);
     }
 
     /**

@@ -49,19 +49,21 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * @param $userId
      * @param $key
      * @return bool
      */
-    public function hasPermission($key)
+    public function hasPermission($userId, $key)
     {
         $sql = 'SELECT COUNT(p.id) FROM Application\Entity\User u'
             . ' JOIN u.role r'
             . ' JOIN r.rolePermissions rp'
             . ' JOIN rp.permission p'
-            . ' WHERE p.name = :key';
+            . ' WHERE p.name = :key AND u.id = :id';
 
         return $this->getEntityManager()->createQuery($sql)
             ->setParameter('key', $key)
+            ->setParameter('id', $userId)
             ->getSingleScalarResult() > 0;
     }
 
