@@ -23,22 +23,18 @@
                 {% include "admin/embed/message.twig" %}
 
                 <form method="POST" action="">
-                    <div class="form-group {% if form.messages.username_empty %}has-error{% endif %}">
+                    <div class="form-group {% if form.messages.username %}has-error{% endif %}">
                         <label>Kullanıcı Adı / E-Posta</label>
                         <input type="text" name="username" placeholder="Kullanıcı Adı ya da E-Posta Adresiniz" class="form-control" />
-                        {% if form.messages.username_empty %}
-                            <span class="help-block">{{ form.messages.username_empty }}</span>
-                        {% endif %}
+                        {% include "admin/embed/help_block.twig" with {'messages': form.messages.username} %}
                     </div>
-                    <div class="form-group {% if form.messages.password_empty %}has-error{% endif %}">
+                    <div class="form-group {% if form.messages.password %}has-error{% endif %}">
                         <label>Şifre</label>
                         <input type="password" name="password" placeholder="Şifre" class="form-control" />
-                        {% if form.messages.password_empty %}
-                            <span class="help-block">{{ form.messages.password_empty }}</span>
-                        {% endif %}
+                        {% include "admin/embed/help_block.twig" with {'messages': form.messages.password} %}
                     </div>
                     <div id="recaptcha_widget">
-                        <div class="form-group {% if form.messages.security_code %}has-error{% endif %}">
+                        <div class="form-group {% if form.messages.security %}has-error{% endif %}">
                             <label class="recaptcha_only_if_image">Güvenlik Kodu</label>
                             <label class="recaptcha_only_if_audio">Güvenlik Kodu</label>
 
@@ -51,9 +47,7 @@
                                 <a href="javascript:Recaptcha.switch_type('image');" class="btn input-group-addon recaptcha_only_if_audio"><span class="fa fa-picture-o"></span></a>
                                 <a href="javascript:Recaptcha.showhelp()" class="btn input-group-addon"><span class="fa fa-question"></span></a>
                             </div>
-                            {% if form.messages.security_code %}
-                                <span class="help-block">{{ form.messages.security_code }}</span>
-                            {% endif %}
+                            {% include "admin/embed/help_block.twig" with {'messages': form.messages.security} %}
                         </div>
                     </div>
                     <div class="form-group">

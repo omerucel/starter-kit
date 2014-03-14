@@ -50,10 +50,10 @@ class PermissionSaveForm extends BaseForm
     protected function validateName()
     {
         if (!Validator::create()->notEmpty()->validate($this->name)) {
-            $this->setMessage('name_empty', 'İzin adı gerekli.');
+            $this->setMessage('name', 'empty', 'İzin adı gerekli.');
         } else {
             if ($this->getPermissionRepository()->isNameUsing($this->name, $this->id)) {
-                $this->setMessage('name_using', 'Seçtiğiniz izin adı kullanılıyor.');
+                $this->setMessage('name', 'using', 'Seçtiğiniz izin adı kullanılıyor.');
             }
         }
     }

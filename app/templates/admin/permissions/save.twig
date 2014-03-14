@@ -14,16 +14,11 @@
 
                 <form method="POST" action="">
                     <input type="hidden" name="id" value="{{ form.id }}" />
-                    <div class="form-group {% if form.messages.name_empty or form.messages.name_using %}has-error{% endif %}">
+                    <div class="form-group {% if form.messages.name %}has-error{% endif %}">
                         <label class="form-label">İzin Adı</label>
                         <input type="text" name="name" class="form-control" placeholder="" autocomplete="off" value="{{ form.name }}" />
                         <span class="help-block">Örn: admin.permissions.list</span>
-                        {% if form.messages.name_empty %}
-                            <span class="help-block">{{ form.messages.name_empty }}</span>
-                        {% endif %}
-                        {% if form.messages.name_using %}
-                            <span class="help-block">{{ form.messages.name_using }}</span>
-                        {% endif %}
+                        {% include "admin/embed/help_block.twig" with {'messages': form.messages.name} %}
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">Kaydet</button>

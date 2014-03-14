@@ -31,21 +31,21 @@ class LoginForm extends BaseForm
     public function validateSecurityCode()
     {
         if (!$this->getRecaptcha()->check()->isValid()) {
-            $this->setMessage('security_code', 'Geçersiz güvenlik kodu.');
+            $this->setMessage('security', 'code', 'Geçersiz güvenlik kodu.');
         }
     }
 
     public function validateUsername()
     {
         if (!Validator::create()->notEmpty()->validate($this->username)) {
-            $this->setMessage('username_empty', 'Kullanıcı adı gerekli.');
+            $this->setMessage('username', 'empty', 'Kullanıcı adı gerekli.');
         }
     }
 
     public function validatePassword()
     {
         if (!Validator::create()->notEmpty()->validate($this->password)) {
-            $this->setMessage('password_empty', 'Şifre gerekli.');
+            $this->setMessage('password', 'empty', 'Şifre gerekli.');
         }
     }
 

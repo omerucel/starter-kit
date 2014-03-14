@@ -75,10 +75,10 @@ class RoleSaveForm extends BaseForm
     protected function validateName()
     {
         if (!Validator::create()->notEmpty()->validate($this->name)) {
-            $this->setMessage('name_empty', 'Rol adı gerekli.');
+            $this->setMessage('name', 'empty', 'Rol adı gerekli.');
         } else {
             if ($this->getRoleRepository()->isNameUsing($this->name, $this->id)) {
-                $this->setMessage('name_using', 'Seçtiğiniz rol adı kullanılıyor.');
+                $this->setMessage('name', 'using', 'Seçtiğiniz rol adı kullanılıyor.');
             }
         }
     }
@@ -86,10 +86,10 @@ class RoleSaveForm extends BaseForm
     protected function validatePermissions()
     {
         if (empty($this->permissions)) {
-            $this->setMessage('permissions_empty', 'Lütfen bir izin seçiniz.');
+            $this->setMessage('permissions', 'empty', 'Lütfen bir izin seçiniz.');
         } else {
             if ($this->getPermissionRepository()->checkIdsCount($this->permissions) != count($this->permissions)) {
-                $this->setMessage('permission_count_fail', 'Lütfen izinleri doğru bir şekilde seçiniz.');
+                $this->setMessage('permission', 'count_fail', 'Lütfen izinleri doğru bir şekilde seçiniz.');
             }
         }
     }

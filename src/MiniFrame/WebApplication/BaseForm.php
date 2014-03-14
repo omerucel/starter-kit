@@ -36,12 +36,17 @@ abstract class BaseForm
     }
 
     /**
+     * @param $group
      * @param $key
      * @param $value
      */
-    public function setMessage($key, $value)
+    public function setMessage($group, $key, $value)
     {
-        $this->messages[$key] = $value;
+        if (!isset($this->messages[$group])) {
+            $this->messages[$group] = array();
+        }
+
+        $this->messages[$group][$key] = $value;
     }
 
     /**
