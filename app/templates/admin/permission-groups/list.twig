@@ -24,7 +24,7 @@
                                 <th>İzin Grubu Adı</th>
                             </thead>
                             <tbody>
-                                {% if pager.isEmpty() == false %}
+                                {% if pager.count() > 0 %}
                                     {% for item in pager %}
                                         <tr>
                                             <td>

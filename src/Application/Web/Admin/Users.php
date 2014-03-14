@@ -2,6 +2,7 @@
 
 namespace Application\Web\Admin;
 
+use Application\Repository\RoleRepository;
 use Doctrine\Common\Collections\Criteria;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
@@ -18,7 +19,9 @@ class Users extends BaseController
 
         $templateParams = array(
             'pager' => $pager,
-            'pagination_html' => $paginationHtml
+            'pagination_html' => $paginationHtml,
+            'all_roles' => $this->getRoleRepository()->findAll(),
+            'role_id' => $this->getRequest()->get('role_id')
         );
 
         if ($this->getSession()->has('deleted_item')) {
@@ -80,8 +83,18 @@ class Users extends BaseController
     {
         $query = $this->getEntityManager()->getRepository('Application\Entity\User')
             ->createQueryBuilder('u')
-            ->orderBy('u.username', Criteria::ASC)
-            ->getQuery();
+            ->orderBy('u.username', Criteria::ASC);
+
+        // Role göre filtrele
+        $roleId = intval($this->getRequest()->get('role_id'));
+        if ($roleId > 0) {
+            $query
+                ->join('u.role', 'r')
+                ->where('r.id = :role_id')
+                ->setParameter('role_id', $roleId);
+        }
+
+        $query = $query->getQuery();
 
         $page = intval($this->getRequest()->get('page', 1));
         $adapter = new DoctrineORMAdapter($query);
@@ -95,5 +108,13 @@ class Users extends BaseController
         }
 
         return $pager;
+    }
+
+    /**
+     * @return RoleRepository
+     */
+    protected function getRoleRepository()
+    {
+        return $this->getEntityManager()->getRepository('Application\Entity\Role');
     }
 }

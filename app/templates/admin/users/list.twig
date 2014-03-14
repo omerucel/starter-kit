@@ -2,6 +2,19 @@
 
 {% block title %}Kullanıcı Listesi{% endblock %}
 
+{% block stylesheets %}
+    <link href="{{ asset_url('/js/select2/select2.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset_url('/js/select2/select2.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#roles").select2();
+        });
+    </script>
+{% endblock %}
+
 {% block main_content %}
     <div class="container">
         <div class="row">
@@ -13,9 +26,21 @@
                 {% include "admin/embed/message.twig" %}
 
                 <form method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
-                    <div class="form-group">
-                        <a href="{{ site_url('/admin/users/save') }}" class="btn btn-success"><i class="fa fa-plus"></i> Yeni Kullanıcı Ekle</a>
-                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-6">
+                            <a href="{{ site_url('/admin/users/save') }}" class="btn btn-success"><i class="fa fa-plus"></i> Yeni Kullanıcı Ekle</a>
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="pull-right">
+                                <select style="width: 200px;" name="role_id" id="roles" onchange="document.location.href='{{ site_url('/admin/users') }}?role_id=' + this.value;">
+                                    <option>Bir Rol Seçin</option>
+                                    {% for role in all_roles %}
+                                        <option value="{{ role.getId() }}" {% if role.getId() == role_id %}selected="selected"{% endif %}>{{ role.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <table class="table table-bordered">
@@ -25,7 +50,7 @@
                                 <th>Rolü</th>
                             </thead>
                             <tbody>
-                                {% if pager.isEmpty() == false %}
+                                {% if pager.count() > 0 %}
                                     {% for item in pager %}
                                         <tr>
                                             <td>
@@ -37,7 +62,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="2">Herhangi kayıt bulunamadı.</td>
+                                        <td colspan="3">Herhangi kayıt bulunamadı.</td>
                                     </tr>
                                 {% endif %}
                             </tbody>
