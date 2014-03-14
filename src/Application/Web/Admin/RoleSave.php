@@ -33,9 +33,11 @@ class RoleSave extends BaseController
         $form->loadParamsFromRequest();
 
         if ($form->isValid()) {
+            $isNew = false;
             $role = $form->getCurrentRole();
             if ($role == null) {
                 $role = new Role();
+                $isNew = true;
             }
 
             // Seçili izinleri kullanarak, ilgili role eklenmemiş izinleri ve silinecek izinleri bul.
@@ -63,6 +65,10 @@ class RoleSave extends BaseController
             $role->setName($form->name);
             $this->getEntityManager()->persist($role);
             $this->getEntityManager()->flush();
+
+            // Yapılan işlem kayıt altına alınıyor.
+            $this->getAuthService()
+                ->newUserActivity('admin.roles.save', array('id' => $role->getId(), 'isNew' => $isNew));
 
             $templateParams['message'] = 'İşlem gerçekleşti.';
             $templateParams['message_type'] = 'success';

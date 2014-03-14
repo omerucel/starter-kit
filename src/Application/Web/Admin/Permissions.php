@@ -35,12 +35,18 @@ class Permissions extends BaseController
     {
         $this->getAuthService()->checkPermission('admin.permissions.delete');
 
+        // Parametreleri al ve kayıtları sil.
         $ids = $this->getRequest()->get('id', array());
         $page = $this->getRequest()->get('page', 1);
 
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Permission')->createQueryBuilder('p');
         $affectedRows = $qb->where($qb->expr()->in('p.id', $ids))->delete()->getQuery()->execute();
 
+        // Yapılan işlem kullanıcı aktivitesi olarak ekleniyor.
+        $this->getAuthService()
+            ->newUserActivity('admin.permissions.delete', array('ids' => $ids, 'affectedRows' => $affectedRows));
+
+        // Silinen kayıt sayısı gösterilmek üzere kayıt altına alınıyor.
         $this->getSession()->set('deleted_item', $affectedRows);
         return $this->redirect('/admin/permissions?page=' . $page);
     }

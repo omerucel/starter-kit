@@ -30,14 +30,20 @@ class PermissionSave extends BaseController
         $form->loadParamsFromRequest();
 
         if ($form->isValid()) {
+            $isNew = false;
             $permission = $form->getCurrentPermission();
             if ($permission == null) {
                 $permission = new Permission();
+                $isNew = true;
             }
 
             $permission->setName($form->name);
             $this->getEntityManager()->persist($permission);
             $this->getEntityManager()->flush();
+
+            // Yapılan işlem kayıt altına alınıyor.
+            $this->getAuthService()
+                ->newUserActivity('admin.permissions.save', array('id' => $permission->getId(), 'isNew' => $isNew));
 
             $templateParams['message'] = 'İşlem gerçekleşti.';
             $templateParams['message_type'] = 'success';

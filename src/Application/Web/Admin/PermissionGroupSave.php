@@ -36,9 +36,11 @@ class PermissionGroupSave extends BaseController
         $form->loadParamsFromRequest();
 
         if ($form->isValid()) {
+            $isNew = false;
             $group = $form->getCurrentGroup();
             if ($group == null) {
                 $group = new PermissionGroup();
+                $isNew = true;
             }
 
             $group->setName($form->name);
@@ -67,6 +69,10 @@ class PermissionGroupSave extends BaseController
             // Değişiklikler veritabanına aktarılıyor.
             $this->getEntityManager()->persist($group);
             $this->getEntityManager()->flush();
+
+            // Yapılan işlem kayıt altına alınıyor.
+            $this->getAuthService()
+                ->newUserActivity('admin.permissions.groups.save', array('id' => $group->getId(), 'isNew' => $isNew));
 
             $templateParams['message'] = 'İşlem gerçekleşti.';
             $templateParams['message_type'] = 'success';

@@ -35,12 +35,18 @@ class PermissionGroups extends BaseController
     {
         $this->getAuthService()->checkPermission('admin.permissions.group.delete');
 
+        // Parametreleri al ve kayıtları sil.
         $ids = $this->getRequest()->get('id', array());
         $page = $this->getRequest()->get('page', 1);
 
         $qb = $this->getEntityManager()->getRepository('Application\Entity\PermissionGroup')->createQueryBuilder('pg');
         $affectedRows = $qb->where($qb->expr()->in('pg.id', $ids))->delete()->getQuery()->execute();
 
+        // Yapılan işlem kullanıcı aktivitesi olarak ekleniyor.
+        $this->getAuthService()
+            ->newUserActivity('admin.permissions.groups.delete', array('ids' => $ids, 'affectedRows' => $affectedRows));
+
+        // Silinen kayıt sayısı gösterilmek üzere kayıt altına alınıyor.
         $this->getSession()->set('deleted_item', $affectedRows);
         return $this->redirect('/admin/permission-groups?page=' . $page);
     }
