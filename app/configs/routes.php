@@ -19,4 +19,8 @@ return array(
     // Admin Roles
     '/admin/roles' => 'Application\Web\Admin\Roles',
     '/admin/roles/save' => 'Application\Web\Admin\RoleSave',
+
+    // Admin Users
+    '/admin/users' => 'Application\Web\Admin\Users',
+    '/admin/users/save' => 'Application\Web\Admin\UserSave'
 );
