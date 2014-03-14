@@ -112,13 +112,18 @@ class UserSaveForm extends BaseForm
 
     protected function validateUsername()
     {
-        // TODO : Karakter kontrolü yapılmalı.
-        if (!Validator::create()->notEmpty()->validate($this->username)) {
-            $this->setMessage('username', 'empty', 'Kullanıcı adı gerekli.');
+        if (preg_match('#[^a-z0-9]#', $this->username)) {
+            $message = 'Kullanıcı adında boşluk olmamalı, türkçe karakter içermemeli'
+                . ' ve sadece şu karakterlerden oluşmalı: a-z, 0-9';
+            $this->setMessage('username', 'format', $message);
         } else {
             if ($this->getUserRepository()->isUsernameUsing($this->username, $this->id)) {
                 $this->setMessage('username', 'using', 'Seçtiğiniz kullanıcı adı kullanılıyor.');
             }
+        }
+
+        if (!Validator::create()->length(3, 16)->validate($this->username)) {
+            $this->setMessage('username', 'length', 'Kullanıcı adı en az 3 en fazla 16 karakter uzunluğunda olabilir.');
         }
     }
 
