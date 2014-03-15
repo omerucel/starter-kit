@@ -2,24 +2,23 @@
 
 namespace Application\Web\Admin;
 
-use Application\Repository\RoleRepository;
-use Application\Repository\UserRepository;
-use Application\Web\Admin\QueryString\UsersQS;
+use Application\Repository\UserActivityRepository;
+use Application\Web\Admin\QueryString\ListQS;
 use Doctrine\Common\Collections\Criteria;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrap3View;
 
-class Users extends BaseController
+class UsersActivities extends BaseController
 {
     /**
-     * @var UsersQS
+     * @var ListQS
      */
-    protected $userQS;
+    protected $listQS;
 
     public function get()
     {
-        $this->getAuthService()->checkPermission('admin.users.list');
+        $this->getAuthService()->checkPermission('admin.users.activities.list');
 
         $pager = $this->getPager();
         $paginationHtml = $this->getPaginationHtml($pager);
@@ -27,36 +26,35 @@ class Users extends BaseController
         $templateParams = array(
             'pager' => $pager,
             'pagination_html' => $paginationHtml,
-            'all_roles' => $this->getRoleRepository()->findAll(),
-            'qs' => $this->getUsersQS()
+            'qs' => $this->getListQS()
         );
 
         if ($this->getSession()->has('deleted_item')) {
             $deletedItem = $this->getSession()->get('deleted_item', 0);
             $this->getSession()->remove('deleted_item');
-            $templateParams['message'] = $deletedItem . ' kullanıcı silindi.';
+            $templateParams['message'] = $deletedItem . ' kullanıcı aktivitesi silindi.';
             $templateParams['message_type'] = 'success';
         }
 
-        return $this->render('admin/users/list.twig', $templateParams);
+        return $this->render('admin/users-activities/list.twig', $templateParams);
     }
 
     public function post()
     {
-        $this->getAuthService()->checkPermission('admin.users.delete');
+        $this->getAuthService()->checkPermission('admin.users.activities.delete');
 
         $ids = $this->getRequest()->get('id', array());
-        $redirectUrl = '/admin/users?' . $this->getUsersQS()->createQueryString();
+        $redirectUrl = '/admin/users-activities?' . $this->getListQS()->createQueryString();
 
         if (empty($ids)) {
             return $this->redirect($redirectUrl);
         }
 
-        $affectedRows = $this->getUserRepository()->deleteIds($ids);
+        $affectedRows = $this->getUserActivityRepository()->deleteIds($ids);
 
         // Yapılan işlem kullanıcı aktivitesi olarak ekleniyor.
         $this->getAuthService()
-            ->newUserActivity('admin.users.delete', array('ids' => $ids, 'affectedRows' => $affectedRows));
+            ->newUserActivity('admin.users.activities.delete', array('ids' => $ids, 'affectedRows' => $affectedRows));
 
         // Silinen kayıt sayısı gösterilmek üzere kayıt altına alınıyor.
         $this->getSession()->set('deleted_item', $affectedRows);
@@ -71,8 +69,8 @@ class Users extends BaseController
     {
         $userController = $this;
         $routeGenerator = function ($page) use ($userController) {
-            $qs = $userController->getUsersQS()->createQueryString(array('page')) . '&page=' . $page;
-            return '/admin/users?' . $qs;
+            $qs = $userController->getListQS()->createQueryString(array('page')) . '&page=' . $page;
+            return '/admin/users-activities?' . $qs;
         };
 
         $pagerView = new TwitterBootstrap3View();
@@ -89,29 +87,25 @@ class Users extends BaseController
      */
     protected function getPager()
     {
-        $query = $this->getUserRepository()->createQueryBuilder('u')
-            ->orderBy('u.username', Criteria::ASC);
+        $query = $this->getUserActivityRepository()
+            ->createQueryBuilder('ua')
+            ->orderBy('ua.createdAt', Criteria::DESC);
 
         // Arama sonucuna göre filtrele
-        if ($this->getUsersQS()->hasSearch()) {
-            $likeStr = '%' . $this->getUsersQS()->getSearch() . '%';
+        if ($this->getListQS()->hasSearch()) {
+            $likeStr = '%' . $this->getListQS()->getSearch() . '%';
             $query
+                ->join('ua.user', 'u')
                 ->where(
                     $query->expr()->orX(
+                        $query->expr()->like('ua.activity', $query->expr()->literal($likeStr)),
+                        $query->expr()->like('ua.data', $query->expr()->literal($likeStr)),
                         $query->expr()->like('u.username', $query->expr()->literal($likeStr)),
                         $query->expr()->like('u.name', $query->expr()->literal($likeStr)),
                         $query->expr()->like('u.surname', $query->expr()->literal($likeStr)),
                         $query->expr()->like('u.email', $query->expr()->literal($likeStr))
                     )
                 );
-        }
-
-        // Role göre filtrele
-        if ($this->getUsersQS()->hasRoleId()) {
-            $query
-                ->join('u.role', 'r')
-                ->where('r.id = :role_id')
-                ->setParameter('role_id', $this->getUsersQS()->getRoleId());
         }
 
         $query = $query->getQuery();
@@ -121,7 +115,7 @@ class Users extends BaseController
 
         try {
             $pager->setMaxPerPage(10)
-                ->setCurrentPage($this->getUsersQS()->getPage());
+                ->setCurrentPage($this->getListQS()->getPage());
         } catch (\Exception $exception) {
 
         }
@@ -130,30 +124,22 @@ class Users extends BaseController
     }
 
     /**
-     * @return UsersQS
+     * @return ListQS
      */
-    public function getUsersQS()
+    public function getListQS()
     {
-        if ($this->userQS == null) {
-            $this->userQS = new UsersQS($this->getRequest());
+        if ($this->listQS == null) {
+            $this->listQS = new ListQS($this->getRequest());
         }
 
-        return $this->userQS;
+        return $this->listQS;
     }
 
     /**
-     * @return RoleRepository
+     * @return UserActivityRepository
      */
-    protected function getRoleRepository()
+    protected function getUserActivityRepository()
     {
-        return $this->getEntityManager()->getRepository('Application\Entity\Role');
-    }
-
-    /**
-     * @return UserRepository
-     */
-    protected function getUserRepository()
-    {
-        return  $this->getEntityManager()->getRepository('Application\Entity\User');
+        return  $this->getEntityManager()->getRepository('Application\Entity\UserActivity');
     }
 }

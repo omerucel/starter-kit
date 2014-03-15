@@ -61,7 +61,15 @@ class InitRoles extends BaseCommand
             'admin.roles.list',
             'admin.roles.show',
             'admin.roles.save',
-            'admin.roles.delete'
+            'admin.roles.delete',
+
+            'admin.users.list',
+            'admin.users.show',
+            'admin.users.save',
+            'admin.users.delete',
+
+            'admin.users.activities.list',
+            'admin.users.activities.delete'
         );
     }
 }

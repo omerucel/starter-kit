@@ -7,7 +7,7 @@ abstract class BaseQS
     /**
      * @var array
      */
-    protected $params = array();
+    public $params = array();
 
     /**
      * @param array $except

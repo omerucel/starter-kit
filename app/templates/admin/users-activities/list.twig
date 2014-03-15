@@ -1,0 +1,71 @@
+{% extends "admin/layout/default.twig" %}
+
+{% block title %}Kullanıcı Aktiviteleri Listesi{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <header class="page-header">
+                    <h1>Kullanıcı Aktiviteleri Listesi</h1>
+                </header>
+
+                {% include "admin/embed/message.twig" %}
+
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-6">
+                        <button type="button" onclick="$('#list-form').submit();" class="btn btn-danger"><i class="fa fa-trash-o"></i> Seçili Elemanları Sil</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="pull-right">
+                            <form method="get" action="">
+                                <input type="hidden" name="page" value="{{ qs.params.page }}" />
+                                <div class="input-group" style="width: 200px;margin-left: 10px;">
+                                    <input type="text" name="search" class="form-control input-sm" value="{{ qs.params.search }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-sm" type="submit">Ara</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="list-form" method="post" action="" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
+                    <div class="form-group">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th style="width: 30px;"><input type="checkbox" onchange="selectAll(this);" /></th>
+                                <th>Kullanıcı Adı</th>
+                                <th>Aktivite</th>
+                                <th>Zaman</th>
+                                <th>Data</th>
+                            </thead>
+                            <tbody>
+                                {% if pager.count() > 0 %}
+                                    {% for item in pager %}
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="id[]" data-select-all="1" value="{{ item.getId() }}" />
+                                            </td>
+                                            <td>{{ item.getUser().getUsername() }}</td>
+                                            <td>{{ item.getActivity() }}</td>
+                                            <td>{{ item.getCreatedAt().format('Y-m-d H:i:s') }}</td>
+                                            <td>{{ item.getData() }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5">Herhangi kayıt bulunamadı.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+                {{ pagination_html|raw }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="user_activity")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\UserActivityRepository")
  */
 class UserActivity
 {

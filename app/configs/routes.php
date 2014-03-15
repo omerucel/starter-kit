@@ -22,5 +22,6 @@ return array(
 
     // Admin Users
     '/admin/users' => 'Application\Web\Admin\Users',
-    '/admin/users/save' => 'Application\Web\Admin\UserSave'
+    '/admin/users/save' => 'Application\Web\Admin\UserSave',
+    '/admin/users-activities' => 'Application\Web\Admin\UsersActivities'
 );
