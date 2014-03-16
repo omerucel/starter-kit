@@ -1,5 +1,14 @@
 {% if message %}
     <div class="alert alert-{{ message_type }}">
         <p>{{ message }}</p>
+        {% if form.messages|length > 0 %}
+            <ul>
+                {% for messageGroup in form.messages %}
+                    {% for message in messageGroup %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 {% endif %}
