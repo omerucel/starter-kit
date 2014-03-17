@@ -49,14 +49,38 @@ class TwigService extends BaseService
 
     /**
      * @param $funcName
-     * @param $funcHelperHame
+     * @param $funcHelperName
      * @return TwigService
      */
-    public function useTwigFunctionHelper($funcName, $funcHelperHame)
+    public function useTwigFunctionHelper($funcName, $funcHelperName)
     {
         if (!isset($this->registeredTwigFunctions[$funcName])) {
-            $func = new \Twig_SimpleFunction($funcName, array($this, $funcHelperHame));
+            if (is_array($funcHelperName)) {
+                $func = new \Twig_SimpleFunction($funcName, $funcHelperName);
+            } else {
+                $func = new \Twig_SimpleFunction($funcName, array($this, $funcHelperName));
+            }
             $this->getTwig()->addFunction($funcName, $func);
+            $this->registeredTwigFunctions[$funcName] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $funcName
+     * @param $funcHelperName
+     * @return TwigService
+     */
+    public function useTwigFilterHelper($funcName, $funcHelperName)
+    {
+        if (!isset($this->registeredTwigFunctions[$funcName])) {
+            if (is_array($funcHelperName)) {
+                $func = new \Twig_SimpleFilter($funcName, $funcHelperName);
+            } else {
+                $func = new \Twig_SimpleFilter($funcName, array($this, $funcHelperName));
+            }
+            $this->getTwig()->addFilter($funcName, $func);
             $this->registeredTwigFunctions[$funcName] = true;
         }
 
