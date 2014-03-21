@@ -37,7 +37,7 @@ class AwsService extends BaseService
      * @param $key
      * @param $filePath
      */
-    protected function uploadToS3($key, $filePath)
+    public function uploadToS3($key, $filePath)
     {
         $this->getS3Client()->putObject(
             array(
